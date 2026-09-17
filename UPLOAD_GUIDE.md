@@ -2,10 +2,10 @@
 
 ## 저장소에 올릴 내용
 
-`GTLeaderboard-1.0.0` 폴더 **안의 파일과 하위 폴더**를
-`GreenRiceCake/GTLeaderboard` 저장소의 **main 브랜치 루트**에 올립니다.
-`GTLeaderboard-1.0.0`이라는 바깥 폴더 자체를 올리지 마세요.
-숨김 파일 `.gitignore`와 `.github` 폴더도 포함합니다.
+현재 이 문서가 있는 `github-upload` 폴더가 로컬 Git 저장소 루트입니다.
+소스와 `update_manifest.json`, `.github`는 저장소 루트에 정리되어 있습니다.
+원격 main의 초기 LICENSE 커밋도 병합했습니다. 이 폴더에서
+`git push -u origin main`을 실행해 업로드합니다.
 
 `update_manifest.json`이 이미 들어 있습니다. 버전은 `1.0.0`, 설명은
 `최초 정식 배포입니다.`이며, 아래 full ZIP의 실제 크기와 SHA-256을 담고 있습니다.
