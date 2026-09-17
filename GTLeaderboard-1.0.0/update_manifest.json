@@ -1,0 +1,17 @@
+{
+  "app": "GTLeaderboard",
+  "schema_version": 1,
+  "version": "1.0.0",
+  "title": "GTLeaderboard v1.0.0 업데이트",
+  "changelog": "최초 정식 배포입니다.",
+  "update_type": "zip",
+  "download_url": "https://github.com/GreenRiceCake/GTLeaderboard/releases/download/v1.0.0/GTLeaderboard-1.0.0-windows-x64-full.zip",
+  "min_updater_protocol": 1,
+  "transactional_package": {
+    "type": "zip",
+    "url": "https://github.com/GreenRiceCake/GTLeaderboard/releases/download/v1.0.0/GTLeaderboard-1.0.0-windows-x64-full.zip",
+    "size": 86092003,
+    "sha256": "b012d4eb8680fc14d3e6eab46dde241fe4dbfe162911e369323e0237ef9a784d",
+    "package_manifest": "release-manifest.json"
+  }
+}

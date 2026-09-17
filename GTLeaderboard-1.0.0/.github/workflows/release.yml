@@ -1,0 +1,55 @@
+name: Windows release
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13.0'
+          architecture: x64
+          cache: pip
+          cache-dependency-path: requirements*.txt
+      - name: Check version tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: python -c "import os; from gtleaderboard import __version__; assert os.environ['GITHUB_REF_NAME'] == 'v' + __version__, 'Tag does not match app version'"
+      - run: python -m pip install -r requirements-build.txt
+      - run: python tools/setup_ocr.py
+      - run: python -m unittest discover -s tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+      - run: python tools/build_release.py
+      - name: Validate frozen executable
+        shell: pwsh
+        run: |
+          $releaseVersion = python -c "from gtleaderboard import __version__; print(__version__)"
+          python tools/smoke_release.py "dist/GTLeaderboard-$releaseVersion-windows-x64/GTLeaderboard.exe"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: GTLeaderboard-windows-x64
+          path: |
+            dist/*-full.zip
+            dist/*-update.zip
+            dist/SHA256SUMS.txt
+            dist/update_manifest.json
+          if-no-files-found: error
+          compression-level: 0
+      - name: Create draft release for a version tag
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $releaseFiles = @(Get-ChildItem dist/*-full.zip, dist/*-update.zip, dist/SHA256SUMS.txt, dist/update_manifest.json | ForEach-Object { $_.FullName })
+          gh release create $env:GITHUB_REF_NAME @releaseFiles --verify-tag --draft --title "GTLeaderboard $env:GITHUB_REF_NAME" --notes-file RELEASE_NOTES.md

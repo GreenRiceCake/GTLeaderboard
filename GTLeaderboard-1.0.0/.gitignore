@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+build/
+dist/
+.pytest_cache/
+artifacts/
+github-upload/
+models/*
+!models/README.md
+tests/fixtures/gt7/*.jpg
+# Personal league files and exported images in the workspace root.
+/*.gtlb
+/*.gtlr
+/*.png
+/*.jpg

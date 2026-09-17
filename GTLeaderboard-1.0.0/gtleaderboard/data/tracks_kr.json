@@ -1,0 +1,854 @@
+{
+  "source": "https://www.gran-turismo.com/kr/gt7/tracklist/",
+  "data_source": "https://www.gran-turismo.com/common/dist/gt7/tracklist/assets/tracks.kr-yBlmn6FE.js",
+  "retrieved_at": "2026-09-08",
+  "tracks": [
+    {
+      "id": "f3f7f9",
+      "base_id": "f99788",
+      "circuit": "Red Bull 링",
+      "name": "Red Bull 링",
+      "country": "오스트리아"
+    },
+    {
+      "id": "c7e77c",
+      "base_id": "f99788",
+      "circuit": "Red Bull 링",
+      "name": "Red Bull 링 쇼트 트랙",
+      "country": "오스트리아"
+    },
+    {
+      "id": "53f1ef",
+      "base_id": "16ccbf",
+      "circuit": "교토 드라이빙 파크",
+      "name": "교토 드라이빙 파크 - 미야비",
+      "country": "일본"
+    },
+    {
+      "id": "6dfca5",
+      "base_id": "16ccbf",
+      "circuit": "교토 드라이빙 파크",
+      "name": "교토 드라이빙 파크 - 야마기와",
+      "country": "일본"
+    },
+    {
+      "id": "d83aeb",
+      "base_id": "16ccbf",
+      "circuit": "교토 드라이빙 파크",
+      "name": "교토 드라이빙 파크 - 야마기와 역주행",
+      "country": "일본"
+    },
+    {
+      "id": "6d5688",
+      "base_id": "16ccbf",
+      "circuit": "교토 드라이빙 파크",
+      "name": "교토 드라이빙 파크 - 야마기와+미야비",
+      "country": "일본"
+    },
+    {
+      "id": "341218",
+      "base_id": "16ccbf",
+      "circuit": "교토 드라이빙 파크",
+      "name": "교토 드라이빙 파크 - 야마기와+미야비 역주행",
+      "country": "일본"
+    },
+    {
+      "id": "b72701",
+      "base_id": "ee72eb",
+      "circuit": "굿우드",
+      "name": "굿우드 모터 서킷",
+      "country": "영국"
+    },
+    {
+      "id": "a8725d",
+      "base_id": "df54ec",
+      "circuit": "그랜드 밸리 - 하이웨이 1",
+      "name": "그랜드 밸리 - 남쪽",
+      "country": "미국"
+    },
+    {
+      "id": "b34920",
+      "base_id": "df54ec",
+      "circuit": "그랜드 밸리 - 하이웨이 1",
+      "name": "그랜드 밸리 - 남쪽 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "c2fd94",
+      "base_id": "df54ec",
+      "circuit": "그랜드 밸리 - 하이웨이 1",
+      "name": "그랜드 밸리 - 하이웨이 1",
+      "country": "미국"
+    },
+    {
+      "id": "19fb71",
+      "base_id": "df54ec",
+      "circuit": "그랜드 밸리 - 하이웨이 1",
+      "name": "그랜드 밸리 - 하이웨이1 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "6e659a",
+      "base_id": "512b99",
+      "circuit": "노던아일 스피드웨이",
+      "name": "노던아일 스피드웨이",
+      "country": "미국"
+    },
+    {
+      "id": "2066d9",
+      "base_id": "246f6d",
+      "circuit": "뉘르부르크링",
+      "name": "뉘르부르크링 - GP",
+      "country": "독일"
+    },
+    {
+      "id": "12ceac",
+      "base_id": "246f6d",
+      "circuit": "뉘르부르크링",
+      "name": "뉘르부르크링 - 북쪽 코스",
+      "country": "독일"
+    },
+    {
+      "id": "8dd16b",
+      "base_id": "246f6d",
+      "circuit": "뉘르부르크링",
+      "name": "뉘르부르크링 - 북쪽 코스 투어리스트",
+      "country": "독일"
+    },
+    {
+      "id": "fd4818",
+      "base_id": "246f6d",
+      "circuit": "뉘르부르크링",
+      "name": "뉘르부르크링 24h",
+      "country": "독일"
+    },
+    {
+      "id": "9ec2c6",
+      "base_id": "246f6d",
+      "circuit": "뉘르부르크링",
+      "name": "뉘르부르크링 스프린트",
+      "country": "독일"
+    },
+    {
+      "id": "31acde",
+      "base_id": "246f6d",
+      "circuit": "뉘르부르크링",
+      "name": "뉘르부르크링 엔듀런스",
+      "country": "독일"
+    },
+    {
+      "id": "592211",
+      "base_id": "246f6d",
+      "circuit": "뉘르부르크링",
+      "name": "뉘르부르크링 엔듀런스 II",
+      "country": "독일"
+    },
+    {
+      "id": "c58e28",
+      "base_id": "d1f17e",
+      "circuit": "데이토나 인터내셔널 스피드웨이",
+      "name": "데이토나 - 로드 코스",
+      "country": "미국"
+    },
+    {
+      "id": "d93f3a",
+      "base_id": "d1f17e",
+      "circuit": "데이토나 인터내셔널 스피드웨이",
+      "name": "데이토나 - 트라이 오벌",
+      "country": "미국"
+    },
+    {
+      "id": "80ef82",
+      "base_id": "e9dd33",
+      "circuit": "도쿄 익스프레스웨이",
+      "name": "도쿄 익스프레스웨이 - 남쪽 루트 내주",
+      "country": "일본"
+    },
+    {
+      "id": "afcb24",
+      "base_id": "e9dd33",
+      "circuit": "도쿄 익스프레스웨이",
+      "name": "도쿄 익스프레스웨이 - 남쪽 루트 외주",
+      "country": "일본"
+    },
+    {
+      "id": "fd9a21",
+      "base_id": "e9dd33",
+      "circuit": "도쿄 익스프레스웨이",
+      "name": "도쿄 익스프레스웨이 - 동쪽 루트 내주",
+      "country": "일본"
+    },
+    {
+      "id": "779efe",
+      "base_id": "e9dd33",
+      "circuit": "도쿄 익스프레스웨이",
+      "name": "도쿄 익스프레스웨이 - 동쪽 루트 외주",
+      "country": "일본"
+    },
+    {
+      "id": "dcdc93",
+      "base_id": "e9dd33",
+      "circuit": "도쿄 익스프레스웨이",
+      "name": "도쿄 익스프레스웨이 - 중앙 루트 내주",
+      "country": "일본"
+    },
+    {
+      "id": "5aeb53",
+      "base_id": "e9dd33",
+      "circuit": "도쿄 익스프레스웨이",
+      "name": "도쿄 익스프레스웨이 - 중앙 루트 외주",
+      "country": "일본"
+    },
+    {
+      "id": "1a1157",
+      "base_id": "08df62",
+      "circuit": "드래곤 트레일",
+      "name": "드래곤 트레일 - 가든",
+      "country": "크로아티아"
+    },
+    {
+      "id": "a93c4d",
+      "base_id": "08df62",
+      "circuit": "드래곤 트레일",
+      "name": "드래곤 트레일 - 가든 역주행",
+      "country": "크로아티아"
+    },
+    {
+      "id": "36a3db",
+      "base_id": "08df62",
+      "circuit": "드래곤 트레일",
+      "name": "드래곤 트레일 - 시사이드",
+      "country": "크로아티아"
+    },
+    {
+      "id": "1095b7",
+      "base_id": "08df62",
+      "circuit": "드래곤 트레일",
+      "name": "드래곤 트레일 - 시사이드 역주행",
+      "country": "크로아티아"
+    },
+    {
+      "id": "0457d4",
+      "base_id": "c81494",
+      "circuit": "딥 포레스트 레이스웨이",
+      "name": "딥 포레스트 레이스웨이",
+      "country": "스위스"
+    },
+    {
+      "id": "f3e708",
+      "base_id": "c81494",
+      "circuit": "딥 포레스트 레이스웨이",
+      "name": "딥 포레스트 레이스웨이 역주행",
+      "country": "스위스"
+    },
+    {
+      "id": "6cdd45",
+      "base_id": "c75e61",
+      "circuit": "라구나 세카 레이스웨이",
+      "name": "라구나 세카 레이스웨이",
+      "country": "미국"
+    },
+    {
+      "id": "40e254",
+      "base_id": "2b352d",
+      "circuit": "레이크 루이스",
+      "name": "레이크 루이스 롱 트랙",
+      "country": "캐나다"
+    },
+    {
+      "id": "154e68",
+      "base_id": "2b352d",
+      "circuit": "레이크 루이스",
+      "name": "레이크 루이스 롱 트랙 역주행",
+      "country": "캐나다"
+    },
+    {
+      "id": "26e1df",
+      "base_id": "2b352d",
+      "circuit": "레이크 루이스",
+      "name": "레이크 루이스 쇼트 트랙",
+      "country": "캐나다"
+    },
+    {
+      "id": "96dc0c",
+      "base_id": "2b352d",
+      "circuit": "레이크 루이스",
+      "name": "레이크 루이스 쇼트 트랙 역주행",
+      "country": "캐나다"
+    },
+    {
+      "id": "97aa3b",
+      "base_id": "2b352d",
+      "circuit": "레이크 루이스",
+      "name": "레이크 루이스 트라이오벌",
+      "country": "캐나다"
+    },
+    {
+      "id": "44b0a2",
+      "base_id": "2b352d",
+      "circuit": "레이크 루이스",
+      "name": "레이크 루이스 트라이오벌 역주행",
+      "country": "캐나다"
+    },
+    {
+      "id": "46b3d9",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 센터",
+      "country": "이탈리아"
+    },
+    {
+      "id": "bccdd8",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 센터 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "e829d7",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 웨스트",
+      "country": "이탈리아"
+    },
+    {
+      "id": "ab5c32",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 웨스트 엔드",
+      "country": "이탈리아"
+    },
+    {
+      "id": "5f2207",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 웨스트 엔드 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "297b7f",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 웨스트 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "7828c0",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 이스트",
+      "country": "이탈리아"
+    },
+    {
+      "id": "cdd5eb",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 이스트 엔드",
+      "country": "이탈리아"
+    },
+    {
+      "id": "a2910f",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 이스트 엔드 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "d1f9b5",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 이스트 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "5ba087",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 풀코스",
+      "country": "이탈리아"
+    },
+    {
+      "id": "71b4d8",
+      "base_id": "39f155",
+      "circuit": "레이크 마조레 - 서킷",
+      "name": "레이크 마조레 - 풀코스 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "c272b2",
+      "base_id": "1d5980",
+      "circuit": "르망 24시간 레이싱 서킷",
+      "name": "르망 24시간 레이싱 서킷",
+      "country": "프랑스"
+    },
+    {
+      "id": "fbd5bc",
+      "base_id": "1d5980",
+      "circuit": "르망 24시간 레이싱 서킷",
+      "name": "르망 24시간 레이싱 서킷 (시케인 없는 레이아웃)",
+      "country": "프랑스"
+    },
+    {
+      "id": "ec1eb6",
+      "base_id": "28b64f",
+      "circuit": "마운트 파노라마",
+      "name": "마운트 파노라마 모터레이싱 서킷",
+      "country": "오스트레일리아"
+    },
+    {
+      "id": "e6817f",
+      "base_id": "f8bd64",
+      "circuit": "몬차 서킷",
+      "name": "몬차 서킷",
+      "country": "이탈리아"
+    },
+    {
+      "id": "f9e0f3",
+      "base_id": "f8bd64",
+      "circuit": "몬차 서킷",
+      "name": "몬차 서킷(시케인 없는 레이아웃)",
+      "country": "이탈리아"
+    },
+    {
+      "id": "da093f",
+      "base_id": "051834",
+      "circuit": "미쉐린 레이스웨이 로드 애틀랜타",
+      "name": "미쉐린 레이스웨이 로드 애틀랜타",
+      "country": "미국"
+    },
+    {
+      "id": "3f4c16",
+      "base_id": "f3d2aa",
+      "circuit": "브랜즈 해치",
+      "name": "브랜즈 해치 GP 서킷",
+      "country": "영국"
+    },
+    {
+      "id": "4ff578",
+      "base_id": "f3d2aa",
+      "circuit": "브랜즈 해치",
+      "name": "브랜즈 해치 인디 서킷",
+      "country": "영국"
+    },
+    {
+      "id": "1fb373",
+      "base_id": "184eaa",
+      "circuit": "브로드 빈 레이스웨이",
+      "name": "브로드 빈 레이스웨이",
+      "country": "일본"
+    },
+    {
+      "id": "092b5e",
+      "base_id": "184eaa",
+      "circuit": "브로드 빈 레이스웨이",
+      "name": "브로드 빈 레이스웨이 역주행",
+      "country": "일본"
+    },
+    {
+      "id": "6bf104",
+      "base_id": "971481",
+      "circuit": "블루문 베이 스피드웨이",
+      "name": "블루문 베이 스피드웨이",
+      "country": "미국"
+    },
+    {
+      "id": "890aef",
+      "base_id": "971481",
+      "circuit": "블루문 베이 스피드웨이",
+      "name": "블루문 베이 스피드웨이 - 인필드 A",
+      "country": "미국"
+    },
+    {
+      "id": "940193",
+      "base_id": "971481",
+      "circuit": "블루문 베이 스피드웨이",
+      "name": "블루문 베이 스피드웨이 - 인필드 A 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "02e205",
+      "base_id": "971481",
+      "circuit": "블루문 베이 스피드웨이",
+      "name": "블루문 베이 스피드웨이 - 인필드 B",
+      "country": "미국"
+    },
+    {
+      "id": "c42430",
+      "base_id": "971481",
+      "circuit": "블루문 베이 스피드웨이",
+      "name": "블루문 베이 스피드웨이 - 인필드 B 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "edfde6",
+      "base_id": "971481",
+      "circuit": "블루문 베이 스피드웨이",
+      "name": "블루문 베이 스피드웨이 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "e9eec1",
+      "base_id": "748156",
+      "circuit": "사르데냐 로드 트랙",
+      "name": "사르데냐 로드 트랙 A",
+      "country": "이탈리아"
+    },
+    {
+      "id": "630793",
+      "base_id": "748156",
+      "circuit": "사르데냐 로드 트랙",
+      "name": "사르데냐 로드 트랙 A 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "394c28",
+      "base_id": "748156",
+      "circuit": "사르데냐 로드 트랙",
+      "name": "사르데냐 로드 트랙 B",
+      "country": "이탈리아"
+    },
+    {
+      "id": "62b62e",
+      "base_id": "748156",
+      "circuit": "사르데냐 로드 트랙",
+      "name": "사르데냐 로드 트랙 B 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "3a0fe1",
+      "base_id": "748156",
+      "circuit": "사르데냐 로드 트랙",
+      "name": "사르데냐 로드 트랙 C",
+      "country": "이탈리아"
+    },
+    {
+      "id": "c4a6df",
+      "base_id": "748156",
+      "circuit": "사르데냐 로드 트랙",
+      "name": "사르데냐 로드 트랙 C 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "89bb71",
+      "base_id": "71bfba",
+      "circuit": "사르데냐 윈드밀",
+      "name": "사르데냐 - 윈드밀",
+      "country": "이탈리아"
+    },
+    {
+      "id": "98a1b3",
+      "base_id": "71bfba",
+      "circuit": "사르데냐 윈드밀",
+      "name": "사르데냐 - 윈드밀 역주행",
+      "country": "이탈리아"
+    },
+    {
+      "id": "954433",
+      "base_id": "a768c9",
+      "circuit": "생트크루아 서킷",
+      "name": "생트크루아 서킷 A",
+      "country": "프랑스"
+    },
+    {
+      "id": "9f7218",
+      "base_id": "a768c9",
+      "circuit": "생트크루아 서킷",
+      "name": "생트크루아 서킷 A 역주행",
+      "country": "프랑스"
+    },
+    {
+      "id": "c81c02",
+      "base_id": "a768c9",
+      "circuit": "생트크루아 서킷",
+      "name": "생트크루아 서킷 B",
+      "country": "프랑스"
+    },
+    {
+      "id": "893d93",
+      "base_id": "a768c9",
+      "circuit": "생트크루아 서킷",
+      "name": "생트크루아 서킷 B 역주행",
+      "country": "프랑스"
+    },
+    {
+      "id": "041ba3",
+      "base_id": "a768c9",
+      "circuit": "생트크루아 서킷",
+      "name": "생트크루아 서킷 C",
+      "country": "프랑스"
+    },
+    {
+      "id": "5c21c8",
+      "base_id": "a768c9",
+      "circuit": "생트크루아 서킷",
+      "name": "생트크루아 서킷 C 역주행",
+      "country": "프랑스"
+    },
+    {
+      "id": "6e378b",
+      "base_id": "fd167d",
+      "circuit": "스즈카 서킷",
+      "name": "스즈카 서킷",
+      "country": "일본"
+    },
+    {
+      "id": "4414cb",
+      "base_id": "fd167d",
+      "circuit": "스즈카 서킷",
+      "name": "스즈카 서킷 - 동쪽 코스",
+      "country": "일본"
+    },
+    {
+      "id": "d60ebc",
+      "base_id": "000971",
+      "circuit": "스파 프랑코샹",
+      "name": "스파 24시간 레이아웃",
+      "country": "벨기에"
+    },
+    {
+      "id": "3c4be1",
+      "base_id": "000971",
+      "circuit": "스파 프랑코샹",
+      "name": "스파 프랑코샹",
+      "country": "벨기에"
+    },
+    {
+      "id": "ef3232",
+      "base_id": "de15df",
+      "circuit": "스페셜 스테이지 - 루트 X",
+      "name": "스페셜 스테이지 - 루트 X",
+      "country": "미국"
+    },
+    {
+      "id": "8d429d",
+      "base_id": "678583",
+      "circuit": "아이거 북벽 코스",
+      "name": "아이거 북벽 코스",
+      "country": "스위스"
+    },
+    {
+      "id": "24f937",
+      "base_id": "678583",
+      "circuit": "아이거 북벽 코스",
+      "name": "아이거 북벽 코스 역주행",
+      "country": "스위스"
+    },
+    {
+      "id": "81f860",
+      "base_id": "bbe708",
+      "circuit": "알자스",
+      "name": "알자스 - 빌리지",
+      "country": "프랑스"
+    },
+    {
+      "id": "ef9ee9",
+      "base_id": "bbe708",
+      "circuit": "알자스",
+      "name": "알자스 - 빌리지 역주행",
+      "country": "프랑스"
+    },
+    {
+      "id": "42ea84",
+      "base_id": "bbe708",
+      "circuit": "알자스",
+      "name": "알자스 - 테스트 코스",
+      "country": "프랑스"
+    },
+    {
+      "id": "131d9e",
+      "base_id": "bbe708",
+      "circuit": "알자스",
+      "name": "알자스 - 테스트 코스 역주행",
+      "country": "프랑스"
+    },
+    {
+      "id": "d3bd76",
+      "base_id": "27adb9",
+      "circuit": "야스 마리나 서킷",
+      "name": "야스 마리나 서킷",
+      "country": "UAE"
+    },
+    {
+      "id": "1d0c5e",
+      "base_id": "8d9953",
+      "circuit": "오토폴리스",
+      "name": "오토폴리스 인터내셔널 레이싱 코스",
+      "country": "일본"
+    },
+    {
+      "id": "2c2c67",
+      "base_id": "8d9953",
+      "circuit": "오토폴리스",
+      "name": "오토폴리스 인터내셔널 레이싱 코스 - 숏컷 코스",
+      "country": "일본"
+    },
+    {
+      "id": "60d74b",
+      "base_id": "e6ef89",
+      "circuit": "왓킨스 글렌 인터내셔널",
+      "name": "왓킨스 글렌 롱 코스",
+      "country": "미국"
+    },
+    {
+      "id": "59f32b",
+      "base_id": "e6ef89",
+      "circuit": "왓킨스 글렌 인터내셔널",
+      "name": "왓킨스 글렌 쇼트 코스",
+      "country": "미국"
+    },
+    {
+      "id": "381321",
+      "base_id": "fb6d1f",
+      "circuit": "윌로 스프링스 레이스웨이",
+      "name": "윌로 스프링스 레이스웨이 - 빅 윌로",
+      "country": "미국"
+    },
+    {
+      "id": "1d6a80",
+      "base_id": "fb6d1f",
+      "circuit": "윌로 스프링스 레이스웨이",
+      "name": "윌로 스프링스 레이스웨이 - 스트리트 오브 윌로 스프링스",
+      "country": "미국"
+    },
+    {
+      "id": "9caea1",
+      "base_id": "fb6d1f",
+      "circuit": "윌로 스프링스 레이스웨이",
+      "name": "윌로 스프링스 레이스웨이 - 스트리트 오브 윌로 스프링스 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "38d7ae",
+      "base_id": "fb6d1f",
+      "circuit": "윌로 스프링스 레이스웨이",
+      "name": "윌로 스프링스 레이스웨이 - 호스티프 마일",
+      "country": "미국"
+    },
+    {
+      "id": "bcfdfc",
+      "base_id": "fb6d1f",
+      "circuit": "윌로 스프링스 레이스웨이",
+      "name": "윌로 스프링스 레이스웨이 - 호스티프 마일 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "101516",
+      "base_id": "fe330b",
+      "circuit": "인터라고스 서킷",
+      "name": "인터라고스 서킷",
+      "country": "브라질"
+    },
+    {
+      "id": "e86599",
+      "base_id": "4b2a08",
+      "circuit": "질 빌뇌브 서킷",
+      "name": "질 빌뇌브 서킷",
+      "country": "캐나다"
+    },
+    {
+      "id": "f18da2",
+      "base_id": "c5de8a",
+      "circuit": "츠쿠바 서킷",
+      "name": "츠쿠바 서킷",
+      "country": "일본"
+    },
+    {
+      "id": "aa8dc5",
+      "base_id": "083de2",
+      "circuit": "카탈루냐 서킷",
+      "name": "카탈루냐 서킷 GP 레이아웃",
+      "country": "스페인"
+    },
+    {
+      "id": "a5d0f0",
+      "base_id": "083de2",
+      "circuit": "카탈루냐 서킷",
+      "name": "카탈루냐 서킷 GP 레이아웃 (시케인 없는 레이아웃)",
+      "country": "스페인"
+    },
+    {
+      "id": "d84128",
+      "base_id": "083de2",
+      "circuit": "카탈루냐 서킷",
+      "name": "카탈루냐 서킷 내셔널 레이아웃",
+      "country": "스페인"
+    },
+    {
+      "id": "3bee8b",
+      "base_id": "083de2",
+      "circuit": "카탈루냐 서킷",
+      "name": "카탈루냐 서킷 랠리 크로스 레이아웃",
+      "country": "스페인"
+    },
+    {
+      "id": "14872f",
+      "base_id": "cea600",
+      "circuit": "콜로라도 스프링스",
+      "name": "콜로라도 스프링스 - 레이크",
+      "country": "미국"
+    },
+    {
+      "id": "46d3f1",
+      "base_id": "cea600",
+      "circuit": "콜로라도 스프링스",
+      "name": "콜로라도 스프링스 - 레이크 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "802508",
+      "base_id": "e60841",
+      "circuit": "트라이얼 마운틴 서킷",
+      "name": "트라이얼 마운틴 서킷",
+      "country": "미국"
+    },
+    {
+      "id": "26514b",
+      "base_id": "e60841",
+      "circuit": "트라이얼 마운틴 서킷",
+      "name": "트라이얼 마운틴 서킷 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "795ed4",
+      "base_id": "f2875b",
+      "circuit": "피셔맨 - 랜치",
+      "name": "피셔맨 - 랜치",
+      "country": "미국"
+    },
+    {
+      "id": "45e222",
+      "base_id": "f2875b",
+      "circuit": "피셔맨 - 랜치",
+      "name": "피셔맨 - 랜치 역주행",
+      "country": "미국"
+    },
+    {
+      "id": "65e108",
+      "base_id": "9a42fb",
+      "circuit": "하이 스피드 링",
+      "name": "하이 스피드 링",
+      "country": "일본"
+    },
+    {
+      "id": "ede05f",
+      "base_id": "9a42fb",
+      "circuit": "하이 스피드 링",
+      "name": "하이 스피드 링 역주행",
+      "country": "일본"
+    },
+    {
+      "id": "d066e4",
+      "base_id": "664e17",
+      "circuit": "후지 스피드웨이",
+      "name": "후지 스피드웨이",
+      "country": "일본"
+    },
+    {
+      "id": "b1c9f8",
+      "base_id": "664e17",
+      "circuit": "후지 스피드웨이",
+      "name": "후지 스피드웨이 (쇼트)",
+      "country": "일본"
+    }
+  ]
+}

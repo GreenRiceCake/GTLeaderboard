@@ -1,0 +1,862 @@
+{
+  "format": "GTLeaderboard",
+  "schemaVersion": 1,
+  "kind": "league",
+  "data": {
+    "name": "데모 리그 · 시즌 01",
+    "id": "d25b8c5ad5144cbab7e9806e44ef43de",
+    "drivers": [
+      {
+        "name": "드라이버 01",
+        "id": "379d9d490d344373ad20155f0baa4f5a"
+      },
+      {
+        "name": "드라이버 02",
+        "id": "7850d2f2b7d1422b8400abc0d8f22f8f"
+      },
+      {
+        "name": "드라이버 03",
+        "id": "607999516aa6405fadb6ce6252a92ba0"
+      },
+      {
+        "name": "드라이버 04",
+        "id": "a0a06889660a420282696ac4290c9ac8"
+      },
+      {
+        "name": "드라이버 05",
+        "id": "66d4a783e10f431294bfb4410932f52f"
+      },
+      {
+        "name": "드라이버 06",
+        "id": "e0e1c923d56a46fc8ce774f0fdbf7815"
+      },
+      {
+        "name": "드라이버 07",
+        "id": "171e8947afa04abe9f210b734dbf664f"
+      },
+      {
+        "name": "드라이버 08",
+        "id": "f49715df13fc471981e4f787475795f0"
+      },
+      {
+        "name": "드라이버 09",
+        "id": "e913eb88936249b5be99a047cacf5e65"
+      },
+      {
+        "name": "드라이버 10",
+        "id": "b50c545a38b54d1fb3d8c6baf5db9cd6"
+      },
+      {
+        "name": "드라이버 11",
+        "id": "608d6c07052140798b94a61b96a29159"
+      },
+      {
+        "name": "드라이버 12",
+        "id": "3e911e6ecfed440186f4f0493d05b238"
+      },
+      {
+        "name": "드라이버 13",
+        "id": "b54a467419d34ed59156c08ab10538ad"
+      },
+      {
+        "name": "드라이버 14",
+        "id": "a816a2e81f2143eba0e530e930d0375a"
+      },
+      {
+        "name": "드라이버 15",
+        "id": "f0ef2f296ccf43ff970f93ec0bdb37ba"
+      },
+      {
+        "name": "드라이버 16",
+        "id": "eb872960b3a1416faefe75971894f883"
+      },
+      {
+        "name": "Early Dawn",
+        "id": "a11e761cb9c64de093bbd36b99ddfdbe"
+      },
+      {
+        "name": "Rocket_Silvia",
+        "id": "6507ce7a31be47da8788a4af13a4b270"
+      }
+    ],
+    "rounds": [
+      {
+        "name": "R01",
+        "track_id": "d3bd76",
+        "track_name": "야스 마리나 서킷",
+        "catalog_date": "2026-09-08",
+        "id": "955717e8821749b4b14ae4b24891badf",
+        "roster": [
+          "379d9d490d344373ad20155f0baa4f5a",
+          "7850d2f2b7d1422b8400abc0d8f22f8f",
+          "607999516aa6405fadb6ce6252a92ba0",
+          "a0a06889660a420282696ac4290c9ac8",
+          "66d4a783e10f431294bfb4410932f52f",
+          "e0e1c923d56a46fc8ce774f0fdbf7815",
+          "171e8947afa04abe9f210b734dbf664f",
+          "f49715df13fc471981e4f787475795f0",
+          "e913eb88936249b5be99a047cacf5e65",
+          "b50c545a38b54d1fb3d8c6baf5db9cd6",
+          "608d6c07052140798b94a61b96a29159",
+          "3e911e6ecfed440186f4f0493d05b238",
+          "b54a467419d34ed59156c08ab10538ad",
+          "a816a2e81f2143eba0e530e930d0375a",
+          "f0ef2f296ccf43ff970f93ec0bdb37ba",
+          "eb872960b3a1416faefe75971894f883",
+          "a11e761cb9c64de093bbd36b99ddfdbe",
+          "6507ce7a31be47da8788a4af13a4b270"
+        ],
+        "results": {
+          "379d9d490d344373ad20155f0baa4f5a": {
+            "status": "FINISHED",
+            "position": 1,
+            "pole": true,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "7850d2f2b7d1422b8400abc0d8f22f8f": {
+            "status": "FINISHED",
+            "position": 2,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "607999516aa6405fadb6ce6252a92ba0": {
+            "status": "FINISHED",
+            "position": 3,
+            "pole": false,
+            "fastest": true,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "a0a06889660a420282696ac4290c9ac8": {
+            "status": "FINISHED",
+            "position": 4,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "66d4a783e10f431294bfb4410932f52f": {
+            "status": "FINISHED",
+            "position": 5,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "e0e1c923d56a46fc8ce774f0fdbf7815": {
+            "status": "FINISHED",
+            "position": 6,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "171e8947afa04abe9f210b734dbf664f": {
+            "status": "FINISHED",
+            "position": 7,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "f49715df13fc471981e4f787475795f0": {
+            "status": "FINISHED",
+            "position": 8,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "e913eb88936249b5be99a047cacf5e65": {
+            "status": "FINISHED",
+            "position": 9,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "b50c545a38b54d1fb3d8c6baf5db9cd6": {
+            "status": "FINISHED",
+            "position": 10,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "608d6c07052140798b94a61b96a29159": {
+            "status": "FINISHED",
+            "position": 11,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "3e911e6ecfed440186f4f0493d05b238": {
+            "status": "FINISHED",
+            "position": 12,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "b54a467419d34ed59156c08ab10538ad": {
+            "status": "FINISHED",
+            "position": 13,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "a816a2e81f2143eba0e530e930d0375a": {
+            "status": "FINISHED",
+            "position": 14,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "f0ef2f296ccf43ff970f93ec0bdb37ba": {
+            "status": "FINISHED",
+            "position": 15,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "eb872960b3a1416faefe75971894f883": {
+            "status": "FINISHED",
+            "position": 16,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "a11e761cb9c64de093bbd36b99ddfdbe": {
+            "status": "DNS",
+            "position": null,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "auto_dns"
+          },
+          "6507ce7a31be47da8788a4af13a4b270": {
+            "status": "DNS",
+            "position": null,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "auto_dns"
+          }
+        },
+        "confirmed": true,
+        "history": [
+          {
+            "number": 1,
+            "at": "2026-09-08T15:01:13+00:00",
+            "reason": "가상 참가자로 만든 사용 예시",
+            "results": {
+              "379d9d490d344373ad20155f0baa4f5a": {
+                "status": "FINISHED",
+                "position": 1,
+                "pole": true,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "7850d2f2b7d1422b8400abc0d8f22f8f": {
+                "status": "FINISHED",
+                "position": 2,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "607999516aa6405fadb6ce6252a92ba0": {
+                "status": "FINISHED",
+                "position": 3,
+                "pole": false,
+                "fastest": true,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "a0a06889660a420282696ac4290c9ac8": {
+                "status": "FINISHED",
+                "position": 4,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "66d4a783e10f431294bfb4410932f52f": {
+                "status": "FINISHED",
+                "position": 5,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "e0e1c923d56a46fc8ce774f0fdbf7815": {
+                "status": "FINISHED",
+                "position": 6,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "171e8947afa04abe9f210b734dbf664f": {
+                "status": "FINISHED",
+                "position": 7,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "f49715df13fc471981e4f787475795f0": {
+                "status": "FINISHED",
+                "position": 8,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "e913eb88936249b5be99a047cacf5e65": {
+                "status": "FINISHED",
+                "position": 9,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "b50c545a38b54d1fb3d8c6baf5db9cd6": {
+                "status": "FINISHED",
+                "position": 10,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "608d6c07052140798b94a61b96a29159": {
+                "status": "FINISHED",
+                "position": 11,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "3e911e6ecfed440186f4f0493d05b238": {
+                "status": "FINISHED",
+                "position": 12,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "b54a467419d34ed59156c08ab10538ad": {
+                "status": "FINISHED",
+                "position": 13,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "a816a2e81f2143eba0e530e930d0375a": {
+                "status": "FINISHED",
+                "position": 14,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "f0ef2f296ccf43ff970f93ec0bdb37ba": {
+                "status": "FINISHED",
+                "position": 15,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "eb872960b3a1416faefe75971894f883": {
+                "status": "FINISHED",
+                "position": 16,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "a11e761cb9c64de093bbd36b99ddfdbe": {
+                "status": "DNS",
+                "position": null,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "auto_dns"
+              },
+              "6507ce7a31be47da8788a4af13a4b270": {
+                "status": "DNS",
+                "position": null,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "auto_dns"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "R02",
+        "track_id": "c81c02",
+        "track_name": "생트크루아 서킷 B",
+        "catalog_date": "2026-09-08",
+        "id": "9c07ffb896b5414384a70fdbd7ed8804",
+        "roster": [
+          "379d9d490d344373ad20155f0baa4f5a",
+          "7850d2f2b7d1422b8400abc0d8f22f8f",
+          "607999516aa6405fadb6ce6252a92ba0",
+          "a0a06889660a420282696ac4290c9ac8",
+          "66d4a783e10f431294bfb4410932f52f",
+          "e0e1c923d56a46fc8ce774f0fdbf7815",
+          "171e8947afa04abe9f210b734dbf664f",
+          "f49715df13fc471981e4f787475795f0",
+          "e913eb88936249b5be99a047cacf5e65",
+          "b50c545a38b54d1fb3d8c6baf5db9cd6",
+          "608d6c07052140798b94a61b96a29159",
+          "3e911e6ecfed440186f4f0493d05b238",
+          "b54a467419d34ed59156c08ab10538ad",
+          "a816a2e81f2143eba0e530e930d0375a",
+          "f0ef2f296ccf43ff970f93ec0bdb37ba",
+          "eb872960b3a1416faefe75971894f883",
+          "a11e761cb9c64de093bbd36b99ddfdbe",
+          "6507ce7a31be47da8788a4af13a4b270"
+        ],
+        "results": {
+          "379d9d490d344373ad20155f0baa4f5a": {
+            "status": "DNS",
+            "position": null,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "auto_dns"
+          },
+          "7850d2f2b7d1422b8400abc0d8f22f8f": {
+            "status": "FINISHED",
+            "position": 1,
+            "pole": true,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "607999516aa6405fadb6ce6252a92ba0": {
+            "status": "FINISHED",
+            "position": 2,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "a0a06889660a420282696ac4290c9ac8": {
+            "status": "FINISHED",
+            "position": 3,
+            "pole": false,
+            "fastest": true,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "66d4a783e10f431294bfb4410932f52f": {
+            "status": "FINISHED",
+            "position": 4,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "e0e1c923d56a46fc8ce774f0fdbf7815": {
+            "status": "FINISHED",
+            "position": 5,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "171e8947afa04abe9f210b734dbf664f": {
+            "status": "FINISHED",
+            "position": 6,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "f49715df13fc471981e4f787475795f0": {
+            "status": "FINISHED",
+            "position": 7,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "e913eb88936249b5be99a047cacf5e65": {
+            "status": "FINISHED",
+            "position": 8,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "b50c545a38b54d1fb3d8c6baf5db9cd6": {
+            "status": "FINISHED",
+            "position": 9,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "608d6c07052140798b94a61b96a29159": {
+            "status": "FINISHED",
+            "position": 10,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "3e911e6ecfed440186f4f0493d05b238": {
+            "status": "FINISHED",
+            "position": 11,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "b54a467419d34ed59156c08ab10538ad": {
+            "status": "FINISHED",
+            "position": 12,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "a816a2e81f2143eba0e530e930d0375a": {
+            "status": "FINISHED",
+            "position": 13,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "f0ef2f296ccf43ff970f93ec0bdb37ba": {
+            "status": "FINISHED",
+            "position": 14,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "eb872960b3a1416faefe75971894f883": {
+            "status": "FINISHED",
+            "position": 15,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "a11e761cb9c64de093bbd36b99ddfdbe": {
+            "status": "FINISHED",
+            "position": 16,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "manual"
+          },
+          "6507ce7a31be47da8788a4af13a4b270": {
+            "status": "DNS",
+            "position": null,
+            "pole": false,
+            "fastest": false,
+            "penalty": 0,
+            "note": "",
+            "source": "auto_dns"
+          }
+        },
+        "confirmed": true,
+        "history": [
+          {
+            "number": 1,
+            "at": "2026-09-08T15:01:13+00:00",
+            "reason": "가상 참가자로 만든 사용 예시",
+            "results": {
+              "379d9d490d344373ad20155f0baa4f5a": {
+                "status": "DNS",
+                "position": null,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "auto_dns"
+              },
+              "7850d2f2b7d1422b8400abc0d8f22f8f": {
+                "status": "FINISHED",
+                "position": 1,
+                "pole": true,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "607999516aa6405fadb6ce6252a92ba0": {
+                "status": "FINISHED",
+                "position": 2,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "a0a06889660a420282696ac4290c9ac8": {
+                "status": "FINISHED",
+                "position": 3,
+                "pole": false,
+                "fastest": true,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "66d4a783e10f431294bfb4410932f52f": {
+                "status": "FINISHED",
+                "position": 4,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "e0e1c923d56a46fc8ce774f0fdbf7815": {
+                "status": "FINISHED",
+                "position": 5,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "171e8947afa04abe9f210b734dbf664f": {
+                "status": "FINISHED",
+                "position": 6,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "f49715df13fc471981e4f787475795f0": {
+                "status": "FINISHED",
+                "position": 7,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "e913eb88936249b5be99a047cacf5e65": {
+                "status": "FINISHED",
+                "position": 8,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "b50c545a38b54d1fb3d8c6baf5db9cd6": {
+                "status": "FINISHED",
+                "position": 9,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "608d6c07052140798b94a61b96a29159": {
+                "status": "FINISHED",
+                "position": 10,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "3e911e6ecfed440186f4f0493d05b238": {
+                "status": "FINISHED",
+                "position": 11,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "b54a467419d34ed59156c08ab10538ad": {
+                "status": "FINISHED",
+                "position": 12,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "a816a2e81f2143eba0e530e930d0375a": {
+                "status": "FINISHED",
+                "position": 13,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "f0ef2f296ccf43ff970f93ec0bdb37ba": {
+                "status": "FINISHED",
+                "position": 14,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "eb872960b3a1416faefe75971894f883": {
+                "status": "FINISHED",
+                "position": 15,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "a11e761cb9c64de093bbd36b99ddfdbe": {
+                "status": "FINISHED",
+                "position": 16,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "manual"
+              },
+              "6507ce7a31be47da8788a4af13a4b270": {
+                "status": "DNS",
+                "position": null,
+                "pole": false,
+                "fastest": false,
+                "penalty": 0,
+                "note": "",
+                "source": "auto_dns"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "R03",
+        "track_id": "60d74b",
+        "track_name": "왓킨스 글렌 롱 코스",
+        "catalog_date": "2026-09-08",
+        "id": "5f8dbc7cb7c54ee0806675c8b220c7e1",
+        "roster": [],
+        "results": {},
+        "confirmed": false,
+        "history": []
+      }
+    ],
+    "rules": {
+      "position_points": [
+        25,
+        18,
+        15,
+        12,
+        10,
+        8,
+        6,
+        4,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "status_points": {
+        "DNS": 0,
+        "DNQ": 0,
+        "DNF": 0,
+        "DSQ": 0
+      },
+      "pole": {
+        "enabled": true,
+        "points": 3,
+        "finished_only": true,
+        "top_n": 0
+      },
+      "fastest": {
+        "enabled": true,
+        "points": 3,
+        "finished_only": true,
+        "top_n": 0
+      },
+      "stack_bonuses": true
+    },
+    "rules_history": []
+  }
+}
