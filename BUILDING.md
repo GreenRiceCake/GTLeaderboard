@@ -31,31 +31,3 @@ Qt DLL을 직접 교체할 수 있는 디렉터리 빌드는 `--onedir`로 생�
 ([PyInstaller 공식 안내](https://pyinstaller.org/en/stable/operating-mode.html))
 앱 소스, 코스 목록, 명시한 문서만 SOURCE.zip에 넣으며 개인 리그·PNG·스크린샷은 포함하지 않습니다.
 현재 코드 서명은 없습니다. 이 PC의 EXE 검사와 별개로 최초 공개 전 다른 Windows PC에서도 실행을 확인하세요.
-
-## 카페 · GitHub
-
-GitHub Release에는 전체 ZIP을 첨부하고, 공개 후 update_manifest.json을 main 브랜치 루트에 갱신합니다. 이전 버전 지원을 위해 같은 JSON을 Latest Release에도 첨부할 수 있습니다. 업데이트 ZIP과 SHA256SUMS.txt도 함께 제공할 수 있습니다. 카페의 첨부 용량 제한 때문에
-첨부가 불가능하면 GitHub Release 링크를 게시할 수 있습니다.
-저장소 업로드 전 개인 파일이 추적되지 않는지 확인하고, 전체 작업 폴더를 올리지 마세요.
-`.github/workflows/release.yml`은 수동 실행 또는 `v1.0.0` 같은 태그로
-Windows 빌드·테스트·EXE 검사 후 산출물을 남깁니다. 태그 실행은 공개 전 검토할
-**초안 Release**를 만듭니다. 현재 원격 저장소 생성·업로드·공개는 수행하지 않았습니다.
-
-새 버전은 `gtleaderboard/__init__.py`와 릴리스 노트·안내문 버전을 함께 수정합니다.
-ZIP 내부 release-manifest.json은 파일 목록/크기/SHA-256, 모델 해시, 지원 저장 형식을 기록합니다.
-다음 버전이 저장 형식을 변경하면 updater의 호환 검사와 manifest의 leagueSchema도 같이 변경해야 합니다.
-해시는 손상 검사용이며 배포자 인증용 전자서명은 아닙니다.
-모델 버전이 바뀌면 기존 모델 재사용을 거부하므로 전체 패키지를 제공합니다.
-
-빌드는 dist/update_manifest.json을 ZIP의 실제 버전·크기·해시로 생성합니다.
-앱은 GreenRiceCake/GTLeaderboard의 main/update_manifest.json Raw 주소를 고정 사용합니다. 사용자 지정 주소 설정은 무시합니다.
-업로드할 파일과 공개 순서는 UPDATING.md를 참고하세요. 기존 앱·리그는 덮어쓰지 않습니다.
-
-## GitHub 업로드 폴더 준비
-
-빌드 완료 후 `python tools/prepare_github_upload.py`를 실행하면
-`github-upload/GTLeaderboard-1.0.0/`에 공개용 소스와 같은 빌드의 `update_manifest.json`을 모읍니다.
-이 폴더 **안의 내용**을 main 브랜치 루트에 올립니다. `.github`와 `.gitignore`도 포함합니다.
-개인 리그·원본 스크린샷·개인 자료에 의존하는 테스트·빌드 캐시·모델 바이너리는 제외합니다.
-이미 파일이 있는 대상은 덮어쓰지 않습니다. 재준비 시 명령 뒤에 새 대상 폴더를 지정하세요.
-GitHub Actions에서 다시 빌드했다면 그 빌드의 ZIP과 매니페스트를 함께 사용해야 합니다.
