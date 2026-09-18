@@ -1,33 +1,59 @@
-# Windows 배포 · 재빌드
+# Windows 빌드 안내
 
-Windows x64, Python 3.13 x64에서 실행합니다.
+소스에서 Windows 실행 파일을 만드는 방법입니다. 프로그램 사용자는 배포 ZIP을 받아 실행하면 됩니다.
+
+## 개발 환경과 빌드
+
+Windows x64와 Python 3.13 x64가 필요합니다. 저장소 루트에서 PowerShell로 실행합니다.
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-build.txt
 .\.venv\Scripts\python.exe tools/setup_ocr.py
 .\.venv\Scripts\python.exe tools/build_release.py
+```
+
+`setup_ocr.py`는 OCR 모델을 다운로드하고 해시를 검증합니다.
+빌드에 사용한 Python과 라이브러리 버전은 `BUILD_INFO.json`에 기록됩니다.
+
+## 검증
+
+소스 저장소의 테스트와 빌드한 EXE의 자체 검사를 실행합니다.
+아래 경로의 `1.0.0`은 빌드한 버전에 맞게 바꿉니다.
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests
 .\.venv\Scripts\python.exe tools/smoke_release.py dist/GTLeaderboard-1.0.0-windows-x64/GTLeaderboard.exe
 ```
 
-소스 저장소의 테스트는 `python -m unittest discover -s tests`로 실행합니다.
-개인 정보가 들어갈 수 있는 테스트 자료는 배포용 SOURCE.zip에서 제외합니다.
-SOURCE.zip을 해제한 소스만으로도 앱을 재빌드할 수 있습니다.
-Qt DLL을 직접 교체할 수 있는 디렉터리 빌드는 `--onedir`로 생성합니다.
-라이브러리 수정 버전을 사용하려면 requirements의 해당 버전 고정을 조정해
-같은 가상환경에 설치하고 재빌드합니다. 빌드에 사용한 버전은 BUILD_INFO.json에 기록됩니다.
-공식 라이선스 텍스트를 다시 준비하려면 `python tools/fetch_release_licenses.py`를 실행합니다.
+배포 ZIP에 포함된 `SOURCE.zip`은 재빌드용 소스이며 테스트 자료는 포함하지 않습니다.
+테스트는 저장소 소스에서 실행하고, `SOURCE.zip`으로 재빌드한 경우에는 EXE 자체 검사를 실행합니다.
 
-## 배포 파일
+## 생성되는 파일
 
-- `dist/GTLeaderboard-1.0.0-windows-x64-full.zip`: EXE, OCR 모델, 사용법, 라이선스, 앱 소스.
-- `dist/GTLeaderboard-1.0.0-windows-x64-update.zip`: 같은 구성에서 OCR 모델 파일만 제외.
-- `dist/update_manifest.json`: 자동 업데이트용 버전·변경 사항·전체 ZIP 주소·크기·SHA-256.
-- `dist/SHA256SUMS.txt`: 두 ZIP과 업데이트 매니페스트의 SHA-256.
-- `dist/GTLeaderboard-1.0.0-windows-x64/`: 바로 실행할 수 있는 전체 구성.
+버전이 `1.0.0`일 때 `dist` 폴더에 다음 파일이 생성됩니다.
 
-실행 파일은 PyInstaller onefile 형식이고 실행 시 내부 구성요소를 임시 폴더에
-풀기 때문에 첫 화면이 나타나기까지 잠시 걸릴 수 있습니다.
-([PyInstaller 공식 안내](https://pyinstaller.org/en/stable/operating-mode.html))
-앱 소스, 코스 목록, 명시한 문서만 SOURCE.zip에 넣으며 개인 리그·PNG·스크린샷은 포함하지 않습니다.
-현재 코드 서명은 없습니다. 이 PC의 EXE 검사와 별개로 최초 공개 전 다른 Windows PC에서도 실행을 확인하세요.
+| 파일 | 내용 |
+| --- | --- |
+| `GTLeaderboard-1.0.0-windows-x64/` | EXE, 외부 OCR 모델, 사용법, 라이선스, 소스 등 실행 구성 |
+| `GTLeaderboard-1.0.0-windows-x64-full.zip` | OCR 모델을 포함한 전체 배포 ZIP |
+| `GTLeaderboard-1.0.0-windows-x64-update.zip` | OCR 모델 파일을 제외한 수동 업데이트 ZIP |
+| `update_manifest.json` | 전체 ZIP의 버전·다운로드 주소·크기·SHA-256 |
+| `SHA256SUMS.txt` | 두 ZIP과 업데이트 매니페스트의 체크섬 |
+
+EXE는 PyInstaller onefile 방식이며, OCR 모델은 EXE 옆의 `models` 폴더에서 읽습니다.
+
+## 라이브러리 교체와 재빌드
+
+`requirements.txt`와 `requirements-build.txt`의 버전을 조정한 뒤 같은 가상환경에서 다시 설치하고 빌드합니다.
+Qt DLL을 직접 교체할 수 있는 디렉터리 빌드는 다음 명령으로 생성합니다.
+출력 경로는 명령 완료 시 표시되며, 이 옵션은 배포 ZIP을 만들지 않습니다.
+
+```powershell
+.\.venv\Scripts\python.exe tools/build_release.py --onedir
+```
+
+라이선스 텍스트를 다시 준비하려면 `tools/fetch_release_licenses.py`를 실행합니다.
+포함 라이브러리 안내는 [THIRD_PARTY.md](packaging/licenses/THIRD_PARTY.md)를 참고하세요.
+
+버전 변경과 GitHub 배포 절차는 [UPDATING.md](UPDATING.md)에 정리되어 있습니다.

@@ -1,97 +1,86 @@
-# GitHub 자동 업데이트 배포 — v1.0.0
+# 업데이트 배포 안내
 
-앱은 시작 약 1초 후 백그라운드에서 다음 주소를 확인합니다.
+앱은 다음 고정 주소의 매니페스트에서 새 버전을 확인합니다.
 
 ```text
 https://raw.githubusercontent.com/GreenRiceCake/GTLeaderboard/main/update_manifest.json
 ```
 
-이 주소는 **GTLeaderboard 저장소의 main 브랜치 루트에 있는 파일**을 가리킵니다.
-프로그램에 주소가 고정되어 있으며 사용자가 변경할 수 없습니다. 이전 버전에서 저장한
-사용자 지정 주소도 무시합니다. 새 버전 배포 시 main의 같은 파일을 갱신합니다.
+매니페스트는 **main 브랜치 루트**에 있어야 합니다. Release 첨부 파일로만 올리면 앱이 읽을 수 없습니다.
 
-## 이번에 업로드할 파일
+## 버전 준비
 
-GitHub 저장소의 Releases → 새 Release에서 태그 **v1.0.0**을 만들고 ZIP을 먼저 첨부합니다.
-ZIP은 다시 압축하거나 이름을 바꾸지 말고 그대로 첨부하세요.
+1. `gtleaderboard/__init__.py`의 버전과 `RELEASE_NOTES.md` 맨 위 릴리스 설명을 수정합니다. README와 배포 안내문의 버전도 맞춥니다.
+2. [BUILDING.md](BUILDING.md)에 따라 테스트, 빌드 및 EXE 자체 검사를 실행합니다.
+3. `dist`에 생성된 ZIP·매니페스트·체크섬을 한 묶음으로 사용합니다.
 
-| 파일 | 업로드 위치 | 역할 |
+아래는 `1.0.0`의 예시입니다. 다음 배포에서는 버전과 태그를 함께 바꿉니다.
+
+| 파일 | 게시 위치 | 용도 |
 | --- | --- | --- |
-| `dist/update_manifest.json` | **main 브랜치 루트의 update_manifest.json** | 필수. 최신 버전·설명·다운로드 URL·ZIP 크기·SHA-256 |
-| `dist/GTLeaderboard-1.0.0-windows-x64-full.zip` | v1.0.0 Release 첨부 | 필수. EXE와 OCR 모델 포함 |
-| `dist/GTLeaderboard-1.0.0-windows-x64-update.zip` | v1.0.0 Release 첨부 | 선택. 기존 모델을 재사용하는 수동 ZIP 업데이트용 |
-| `dist/SHA256SUMS.txt` | v1.0.0 Release 첨부 | 권장. 파일 체크섬 확인 |
+| `dist/GTLeaderboard-1.0.0-windows-x64-full.zip` | `v1.0.0` Release 첨부 | 필수. 사용자 다운로드와 온라인 업데이트 |
+| `dist/GTLeaderboard-1.0.0-windows-x64-update.zip` | 같은 Release 첨부 | 선택. 기존 모델을 재사용하는 수동 업데이트 |
+| `dist/SHA256SUMS.txt` | 같은 Release 첨부 | 권장. 파일 체크섬 |
+| `dist/update_manifest.json` | main 루트의 `update_manifest.json` | 필수. 최신 버전 안내와 ZIP 검증 정보 |
 
-ZIP을 첨부한 Release를 먼저 공개하고 다운로드 가능한지 확인한 뒤,
-**dist/update_manifest.json을 main 브랜치 루트의 update_manifest.json으로 업로드·갱신**합니다.
-Release 첨부에만 JSON을 올리면 v0.8.3 이후 앱에는 전달되지 않습니다.
-이전 버전(0.7.0부터 0.8.2까지)의 기본 확인 주소를 계속 지원하려면 같은 JSON을 Latest Release에도 첨부하세요.
-앱은 GitHub 로그인 토큰을 사용하지 않으므로 로그인 없이 다운로드할 수 있어야 합니다.
-이 작업에서는 저장소에 실제 업로드하거나 공개하지 않았습니다.
+## 게시 순서
 
-ZIP 안의 `release-manifest.json`은 내부 파일 검사용입니다. 따로 업로드하지 않습니다.
-앱 소스 `SOURCE.zip`도 전체·수동 업데이트 ZIP 안에 이미 포함되어 있습니다.
-사용자의 리그 PNG·GTLB·스크린샷은 업로드 대상이 아닙니다.
+1. 배포할 소스 커밋에 `v1.0.0` 형식의 태그를 지정합니다. 태그 버전과 앱 버전이 같아야 합니다.
+2. 해당 태그의 Release에 full ZIP과 필요한 첨부 파일을 올립니다. ZIP 이름과 내용은 그대로 유지합니다.
+3. Release를 공개하고 매니페스트의 다운로드 주소로 로그인 없이 ZIP을 받을 수 있는지 확인합니다.
+4. **같은 빌드의** `dist/update_manifest.json`을 main 루트에 복사해 커밋하고 푸시합니다.
+5. 이전 버전 앱에서 업데이트 확인 → 다운로드 → 새 폴더 실행을 확인합니다. 최초 배포는 같은 버전을 최신으로 판단하는지 확인합니다.
 
-업데이트 창에서는 주소를 확인·복사할 수 있지만 수정할 수 없습니다.
-시작 시 자동 확인과 ‘지금 업데이트 확인’은 모두 같은 고정 주소를 사용합니다.
+ZIP 안의 `release-manifest.json`은 내부 파일 검사용이므로 따로 게시하지 않습니다.
+라이선스와 재빌드용 `SOURCE.zip`도 배포 ZIP에 포함됩니다.
 
-## 앱의 동작
+## GitHub Actions 사용
 
-1. 처음에는 v1.0.0 전체 ZIP을 풀어 실행합니다. 0.6.x 사용자는 기존 로컬 ZIP 메뉴로도 이동할 수 있습니다.
-2. **프로그램 시작 시 새 버전 자동 확인**이 기본으로 켜져 있습니다. 도움말에서 해제할 수 있습니다.
-3. 최신/더 오래된 버전이면 시작 알림을 띄우지 않습니다. 새 버전이면 ‘업데이트 보기’를 안내합니다.
-4. **도움말 → 버전 · 업데이트**에서 언제든 수동 확인하고 변경 사항을 읽을 수 있습니다.
-5. **다운로드 · 업데이트 준비**를 누르고 새 버전 폴더를 만들 위치를 고릅니다.
-6. HTTPS 다운로드 → ZIP 크기·SHA-256 검사 → 내부 버전·파일 해시·저장 형식·모델 검사 → 새 폴더 확정 순서로 진행합니다.
-7. **현재 리그 저장 후 새 버전 실행**을 누르면 PNG 저장 후 새 앱에서 이어서 엽니다. 저장 취소·실패 또는 프로세스 시작 실패 시 현재 앱을 유지합니다. 폴더를 열어 직접 실행할 수도 있습니다.
+`.github/workflows/release.yml`은 수동 실행 또는 `v*` 태그 푸시로 Windows 빌드·테스트·EXE 검사를 실행합니다.
+태그 실행은 생성한 파일을 첨부한 **초안 Release**를 만듭니다. 검토 후 공개합니다.
+main의 매니페스트는 자동으로 갱신하지 않으므로 게시 순서의 4번을 직접 수행합니다.
 
-설정은 Windows 사용자별 QSettings에 보관되어 다른 버전 폴더로 이동해도 유지됩니다.
-앱 실행을 기다리게 하지 않도록 네트워크 검사는 별도 스레드에서 진행합니다.
-확인 실패나 오프라인 상태에서는 기존 기능을 계속 사용할 수 있습니다.
-다운로드 중 취소하면 임시 ZIP을 정리합니다. 파일 준비가 이미 시작되었다면 그 작업을 마친 뒤 닫습니다.
+로컬 빌드와 Actions 빌드는 같은 버전이어도 ZIP 해시가 다를 수 있습니다.
+실제 Release에 첨부한 ZIP과 **같은 빌드에서 생성된 매니페스트·체크섬**을 사용하세요.
 
-기존 폴더와 리그 파일을 덮어쓰지 않으므로 검증 실패 시 기존 앱을 그대로 쓸 수 있습니다.
-준비가 완료된 뒤에도 이전 EXE로 돌아갈 수 있습니다. 현재 방식은 별도 버전 폴더 준비이며,
-설치된 EXE는 제자리에서 교체하지 않습니다. 사용자가 실행 버튼을 누르면 새 프로세스를 시작하고 현재 창을 닫습니다.
-네트워크 검사는 업데이트 정보·패키지만 요청하며 리그나 스크린샷을 전송하지 않습니다.
+## 매니페스트와 패키지 검증
 
-## 매니페스트 규격
-
-실제 업로드할 JSON은 **dist/update_manifest.json**입니다. 예시의 GTMate 버전·해시를 복사하지 않고
-완성된 GTLeaderboard ZIP에서 실제 값을 생성합니다.
+빌드 도구가 실제 full ZIP의 크기와 SHA-256을 계산해 `dist/update_manifest.json`을 생성합니다.
 
 - `app`: `GTLeaderboard`
 - `schema_version`: `1`
-- `version`: 앱과 ZIP 내부의 버전, 예: `1.0.0` (숫자 세 부분)
-- `title`, `changelog`: 변경 사항. 앱은 HTML로 해석하지 않고 일반 텍스트로 표시합니다.
+- `version`: 앱과 ZIP 내부의 버전. 예: `1.0.0`
+- `title`, `changelog`: 업데이트 제목과 설명. 일반 텍스트로 표시합니다.
 - `update_type`: `zip`
-- `download_url`: **실제 HTTPS 주소 문자열**. `[설명](주소)` 같은 Markdown 문법을 넣지 않습니다.
-- `min_updater_protocol`: `1`. GTLeaderboard의 프로토콜 번호이며 다른 앱의 번호와 호환을 의미하지 않습니다.
-- `transactional_package`: `type`, `url`, `size`(바이트), `sha256`, `package_manifest`.
-- `transactional_package.package_manifest`: `release-manifest.json`.
+- `download_url`: 해당 버전 Release의 full ZIP HTTPS 주소
+- `min_updater_protocol`: `1`
+- `transactional_package`: `type`, `url`, `size`, `sha256`, `package_manifest`
+- `transactional_package.package_manifest`: `release-manifest.json`
 
-온라인 자동 업데이트에는 **full ZIP**을 사용합니다. 모델 누락이나 모델 버전 변경에도
-동일한 절차로 준비할 수 있게 하기 위해서입니다. 같은 앱 버전 이하의 재설치는 막습니다.
-SHA-256은 매니페스트가 신뢰할 수 있다는 전제에서 다운로드 파일을 검증합니다. 전자서명 기능은 아닙니다.
+다운로드 URL은 Markdown 링크가 아닌 URL 문자열이어야 합니다.
+SHA-256은 파일의 손상·불일치를 확인하는 값이며 배포자 인증용 전자서명은 아닙니다.
 
-## 다음 버전 배포
-
-1. `gtleaderboard/__init__.py`의 버전과 `RELEASE_NOTES.md` 맨 위 설명을 수정합니다.
-2. `python -m unittest discover -s tests` 후 `python tools/build_release.py`를 실행합니다.
-3. 빌드 도구가 두 ZIP, **실제 크기·해시를 넣은 update_manifest.json**, SHA256SUMS.txt를 함께 만듭니다.
-4. 새 버전 태그의 Release에 ZIP을 업로드하고 공개한 뒤 main 루트의 update_manifest.json을 갱신합니다. 기존 앱 지원용으로 Latest Release에도 같은 JSON을 첨부할 수 있습니다.
-5. 이전 앱의 ‘지금 업데이트 확인’으로 새 버전 발견 → 다운로드 → 새 폴더 실행을 확인합니다.
-
-ZIP만 변경했다면 반드시 매니페스트도 다시 만드세요. 버전 숫자만 임의로 올리면
-ZIP 내부 버전 검사에서 거부됩니다. 매니페스트만 다시 생성하는 명령은 다음과 같습니다.
+ZIP을 다시 만들면 매니페스트와 체크섬도 함께 갱신해야 합니다.
+기존 EXE를 유지하며 문서와 ZIP을 다시 구성할 때는 빌드 가상환경에서 다음 명령을 실행합니다.
 
 ```powershell
-python tools/make_update_manifest.py dist/GTLeaderboard-1.0.0-windows-x64-full.zip
+.\.venv\Scripts\python.exe tools/build_release.py --repackage
 ```
 
-개별 생성 후에는 SHA256SUMS.txt의 매니페스트 체크섬도 새 값으로 갱신해야 합니다.
-보통은 `python tools/build_release.py --repackage`로 ZIP·매니페스트·체크섬을 함께 생성하세요.
+이미 공개한 릴리스는 가능하면 새 버전으로 배포합니다. 같은 버전 파일을 교체해도 기존 사용자는 새 버전 알림을 받지 않습니다.
+저장 형식이 바뀌면 업데이터 호환 검사와 내부 매니페스트의 `leagueSchema`도 함께 점검합니다.
+모델이 바뀌면 기존 모델 재사용을 거부하므로 full ZIP을 제공합니다.
 
-`.github/workflows/release.yml`도 매니페스트를 생성하고 ZIP들과 함께 초안 Release에 첨부합니다.
-공개는 운영자가 검토 후 수행합니다. **workflow가 main의 JSON을 자동 커밋하지는 않습니다.** Release 공개 후 main 루트의 파일은 운영자가 갱신해야 합니다. 이 작업에서는 원격 GitHub Actions를 실행하지 않았습니다.
+## 앱의 업데이트 동작
+
+시작 시 새 버전 확인은 기본으로 켜져 있으며 도움말에서 해제할 수 있습니다.
+**도움말 → 버전 · 업데이트**에서 수동으로 확인할 수도 있습니다.
+같거나 더 오래된 버전이면 시작 알림을 띄우지 않습니다.
+
+사용자가 업데이트 준비를 실행하면 ZIP의 크기·해시와 내부 버전·파일·저장 형식·모델을 검증한 뒤 새 폴더에 준비합니다.
+**현재 리그 저장 후 새 버전 실행**을 누르면 PNG를 저장하고 새 앱에서 이어서 엽니다.
+저장 취소·실패 또는 새 앱 시작 실패 시 현재 앱을 유지합니다.
+
+기존 앱과 리그 파일을 덮어쓰지 않으며, 설정은 Windows 사용자별로 유지됩니다.
+네트워크 확인이 실패하거나 오프라인이어도 기존 기능을 사용할 수 있습니다.
+업데이트 요청에는 리그나 스크린샷을 전송하지 않습니다.
