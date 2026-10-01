@@ -11,9 +11,13 @@
 ## 다운로드와 실행
 
 [GitHub Releases](https://github.com/GreenRiceCake/GTLeaderboard/releases)에서
-`GTLeaderboard-1.1.0-windows-x64-full.zip`을 받아 압축을 풀고 `GTLeaderboard.exe`를 실행합니다.
+`GTLeaderboard-1.1.1-windows-x64-full.zip`을 받아 압축을 풀고 `GTLeaderboard.exe`를 실행합니다.
 Python을 따로 설치할 필요가 없습니다. OCR 모델은 함께 제공되는 `models` 폴더에 있습니다.
 EXE와 models 폴더를 함께 보관하세요.
+
+GTLeaderboardUpdater.exe와 models 폴더를 함께 보관하세요. 앱의 도움말 → 버전 · 업데이트에서 전용 업데이터를 실행하면 ZIP을 다운로드·검증하여 기존 설치 위치에 덮어쓰고 다시 실행합니다. 리그·설정은 유지하며 실패하면 이전 파일을 복원합니다.
+
+기존 1.0.0·1.1.0 사용자는 최초 한 번 Release의 `GTLeaderboardUpdater-1.1.1-windows-x64.zip`을 기존 프로그램 폴더에 풀어 전용 업데이터를 실행하세요. 기존 앱 내부 업데이트는 새 방식을 지원하지 않습니다. 이미 생긴 중첩 폴더에서는 원래 설치 위치를 감지합니다.
 
 업데이트 정보는 이 저장소 main 브랜치의 `update_manifest.json`에서 확인합니다.
 자세한 배포 절차는 [UPDATING.md](UPDATING.md)를 참고하세요.

@@ -35,12 +35,14 @@ jobs:
         run: |
           $releaseVersion = python -c "from gtleaderboard import __version__; print(__version__)"
           python tools/smoke_release.py "dist/GTLeaderboard-$releaseVersion-windows-x64/GTLeaderboard.exe"
+          python tools/smoke_release.py "dist/GTLeaderboard-$releaseVersion-windows-x64/GTLeaderboardUpdater.exe"
       - uses: actions/upload-artifact@v7
         with:
           name: GTLeaderboard-windows-x64
           path: |
             dist/*-full.zip
             dist/*-update.zip
+            dist/GTLeaderboardUpdater-*-windows-x64.zip
             dist/SHA256SUMS.txt
             dist/update_manifest.json
           if-no-files-found: error
@@ -51,5 +53,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: pwsh
         run: |
-          $releaseFiles = @(Get-ChildItem dist/*-full.zip, dist/*-update.zip, dist/SHA256SUMS.txt, dist/update_manifest.json | ForEach-Object { $_.FullName })
+          $releaseFiles = @(Get-ChildItem dist/*-full.zip, dist/*-update.zip, dist/GTLeaderboardUpdater-*-windows-x64.zip, dist/SHA256SUMS.txt, dist/update_manifest.json | ForEach-Object { $_.FullName })
           gh release create $env:GITHUB_REF_NAME @releaseFiles --verify-tag --draft --title "GTLeaderboard $env:GITHUB_REF_NAME" --notes-file RELEASE_NOTES.md

@@ -12,7 +12,7 @@ from uuid import uuid4
 from .domain import ValidationError
 from .releases import MANIFEST, MAX_PACKAGE, inspect_package, prepare_update, version_tuple
 
-UPDATER_PROTOCOL = 1
+UPDATER_PROTOCOL = 2
 MAX_MANIFEST = 256 * 1024
 
 

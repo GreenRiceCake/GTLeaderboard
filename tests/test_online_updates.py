@@ -82,7 +82,7 @@ class OnlineUpdateTests(unittest.TestCase):
         self.assertNotIn('Old notes', self.release.changelog)
 
     def test_rejects_wrong_app_protocol_and_ambiguous_or_unsafe_metadata(self):
-        mutations = [lambda d: d.update(app='GTMate'), lambda d: d.update(schema_version=True), lambda d: d.update(min_updater_protocol=2), lambda d: d.update(min_updater_protocol=False), lambda d: d.update(download_url='https://example.com/other.zip'), lambda d: d['transactional_package'].update(size=True), lambda d: d['transactional_package'].update(sha256='bad'), lambda d: d['transactional_package'].update(package_manifest='../file'), lambda d: d['transactional_package'].update(url='http://example.com/file')]
+        mutations = [lambda d: d.update(app='GTMate'), lambda d: d.update(schema_version=True), lambda d: d.update(min_updater_protocol=3), lambda d: d.update(min_updater_protocol=False), lambda d: d.update(download_url='https://example.com/other.zip'), lambda d: d['transactional_package'].update(size=True), lambda d: d['transactional_package'].update(sha256='bad'), lambda d: d['transactional_package'].update(package_manifest='../file'), lambda d: d['transactional_package'].update(url='http://example.com/file')]
         for mutate in mutations:
             data = json.loads(self.raw)
             mutate(data)

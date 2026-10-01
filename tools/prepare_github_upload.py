@@ -32,11 +32,11 @@ def prepare(destination):
     files += [p for p in (ROOT / 'tests').glob('test_*.py') if p.name not in PRIVATE_FIXTURE_TESTS]
     files += [p for p in (ROOT / 'packaging').rglob('*') if p.is_file() and p.suffix in {'.txt', '.md'}]
     files += [ROOT / name for name in (
-        '.gitignore', '.github/workflows/release.yml', 'run.pyw',
+        '.gitignore', '.github/workflows/release.yml', 'run.pyw', 'run_updater.pyw',
         'requirements.txt', 'requirements-build.txt', 'BUILDING.md', 'UPDATING.md',
-        'RELEASE_NOTES.md', 'models/README.md', 'examples/demo.gtlb',
+        'RELEASE_NOTES.md', 'UPDATE_RECOVERY_NOTICE.md', 'models/README.md', 'examples/demo.gtlb',
         'tools/build_release.py', 'tools/setup_ocr.py', 'tools/fetch_release_licenses.py',
-        'tools/smoke_release.py', 'tools/make_update_manifest.py',
+        'tools/smoke_release.py', 'tools/smoke_inplace_update.py', 'tools/make_update_manifest.py',
         'tools/update_tracks.py', 'tools/prepare_github_upload.py',
     )]
     for source in files:

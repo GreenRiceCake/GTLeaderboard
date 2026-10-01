@@ -1,5 +1,6 @@
 """Background release discovery and user-driven HTTPS or local ZIP updates."""
 from urllib.error import HTTPError, URLError
+import time
 from PySide6.QtCore import QProcess, QSettings, QThread, QTimer, Qt, QUrl, Signal
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import QCheckBox, QDialog, QFileDialog, QHBoxLayout, QLabel, QMessageBox, QProgressBar, QTextEdit, QVBoxLayout
@@ -9,6 +10,8 @@ from .catalog import model_directory
 from .releases import inspect_package, prepare_update, version_tuple
 from .online_updates import UpdateCancelled, default_manifest_url, download_and_prepare, fetch_manifest
 from .ui import button
+from .installer import installation_directory, legacy_installation, prepare_repair, temporary_workspace
+from .updater_launch import start_updater, updater_ready
 
 
 class PackageWorker(QThread):
@@ -49,13 +52,28 @@ class UpdateDialog(QDialog):
         self.package = None
         self.prepared = None
         self.closing = False
+        self.current_install = installation_directory()
+        self.repair_target = legacy_installation(self.current_install) if self.current_install else None
+        self.install_target = self.repair_target or self.current_install
+        self.workspace = None
+        self.external_request = None
+        self.handoff_timer = QTimer(self)
+        self.handoff_timer.setInterval(150)
+        self.handoff_timer.timeout.connect(self.poll_updater)
         layout = QVBoxLayout(self)
         title = QLabel(f"GTLeaderboard  {__version__}")
         title.setObjectName("brand")
         layout.addWidget(title)
-        description = QLabel("GitHub의 최신 버전을 확인하고 업데이트를 내려받습니다.\n새 버전은 별도 폴더에 준비하며 기존 앱·리그 파일은 유지합니다.")
+        description = QLabel("GitHub의 최신 버전을 확인합니다.\n전용 GTLeaderboardUpdater.exe가 ZIP을 내려받아 기존 설치 폴더에 적용합니다.")
         description.setWordWrap(True)
         layout.addWidget(description)
+        self.target_label = QLabel(f"적용 위치: {self.install_target}" if self.install_target else '소스 실행 중 · 파일 교체는 배포용 EXE에서 지원합니다.')
+        self.target_label.setWordWrap(True)
+        self.target_label.setTextFormat(Qt.TextFormat.PlainText)
+        layout.addWidget(self.target_label)
+        self.repair = button('기존 설치 폴더로 복구', self.repair_installation, True)
+        self.repair.setVisible(self.repair_target is not None)
+        layout.addWidget(self.repair)
         layout.addWidget(QLabel("업데이트 배포 주소 · 프로그램에 고정됨"))
         self.source_label = QLabel(default_manifest_url())
         self.source_label.setTextFormat(Qt.TextFormat.PlainText)
@@ -68,7 +86,7 @@ class UpdateDialog(QDialog):
         layout.addWidget(self.automatic)
         online = QHBoxLayout()
         self.check = button("지금 업데이트 확인", self.check_online)
-        self.download = button("다운로드 · 업데이트 준비", self.download_online, True)
+        self.download = button("전용 업데이터로 업데이트", self.download_online, True)
         self.cancel_button = button("작업 취소", self.cancel_operation)
         for widget in (self.check, self.download, self.cancel_button):
             online.addWidget(widget)
@@ -85,15 +103,17 @@ class UpdateDialog(QDialog):
         self.status.setWordWrap(True)
         self.status.setTextFormat(Qt.TextFormat.PlainText)
         layout.addWidget(self.status)
-        note = QLabel("파일 검사는 손상 여부를 확인합니다. 신뢰하는 배포자가 제공한 패키지를 사용하세요.\n업데이트 전에 리그를 저장하고, 새 버전에서 원본 리그 파일을 열면 됩니다.")
+        note = QLabel("전용 업데이터를 열기 전에 현재 리그를 저장합니다. 업데이터 시작을 확인하면 현재 앱을 종료합니다.\nZIP 다운로드와 설치 진행 상황은 업데이터 창에서 표시합니다.")
         note.setWordWrap(True)
         layout.addWidget(note)
-        self.launch = button('현재 리그 저장 후 새 버전 실행', self.launch_prepared, True)
+        self.launch = button('현재 리그 저장 후 업데이트 적용', self.launch_prepared, True)
+        self.launch.setVisible(self.install_target is None)
         layout.addWidget(self.launch)
         row = QHBoxLayout()
         self.choose = button("업데이트 ZIP 선택", self.choose_package)
-        self.prepare = button("새 버전 폴더 준비", self.prepare_package, True)
+        self.prepare = button("업데이트 준비", self.prepare_package, True)
         self.folder = button("준비된 폴더 열기", self.open_folder)
+        self.folder.setVisible(self.install_target is None)
         self.close_button = button("닫기", self.reject)
         for widget in (self.choose, self.prepare, self.folder, self.close_button):
             row.addWidget(widget)
@@ -104,14 +124,15 @@ class UpdateDialog(QDialog):
             self.refresh_buttons()
 
     def refresh_buttons(self):
-        busy = self.worker is not None
+        busy = self.worker is not None or self.external_request is not None
         self.choose.setEnabled(not busy)
+        self.repair.setEnabled(not busy and self.repair_target is not None and self.prepared is None)
         self.prepare.setEnabled(not busy and self.package is not None and self.prepared is None)
         self.folder.setEnabled(not busy and self.prepared is not None)
         self.launch.setEnabled(not busy and self.prepared is not None and hasattr(self.parent(), 'save'))
         self.check.setEnabled(not busy)
         self.download.setEnabled(not busy and self.online_release is not None and self.prepared is None)
-        self.cancel_button.setEnabled(busy and not self.closing)
+        self.cancel_button.setEnabled(self.worker is not None and not self.closing)
 
     def check_online(self):
         url = default_manifest_url()
@@ -125,7 +146,7 @@ class UpdateDialog(QDialog):
         self.changelog.setPlainText(f"{release.title}\n\n{release.changelog}")
         if version_tuple(release.version) > version_tuple(__version__):
             self.online_release = release
-            self.status.setText(f"새 버전이 있습니다: {__version__} → {release.version}\n다운로드 {release.size / 1024 / 1024:.1f} MB · 업데이트 준비를 눌러 저장 위치를 고르세요.")
+            self.status.setText(f"새 버전이 있습니다: {__version__} → {release.version}\n다운로드 {release.size / 1024 / 1024:.1f} MB · 다운로드 후 기존 설치 폴더에 적용합니다.")
         elif release.version == __version__:
             self.status.setText(f"최신 버전입니다. ({__version__})")
         else:
@@ -135,7 +156,10 @@ class UpdateDialog(QDialog):
         release = self.online_release
         if release is None:
             return
-        parent = QFileDialog.getExistingDirectory(self, "새 버전 폴더를 만들 위치 선택", str(model_directory().parent.parent))
+        if self.install_target is not None:
+            self.handoff('online')
+            return
+        parent = self.preparation_directory()
         if not parent:
             return
         self.status.setText("업데이트를 내려받고 크기·SHA-256·패키지 내용을 검사합니다…")
@@ -145,7 +169,7 @@ class UpdateDialog(QDialog):
         self.progress.setRange(0, 100)
         self.progress.setValue(int(received * 100 / total))
         if received == total:
-            self.status.setText("다운로드 완료. 파일 검증과 새 버전 폴더 준비 중입니다…")
+            self.status.setText("다운로드 완료. 파일 검증과 업데이트 준비 중입니다…")
 
     def cancel_operation(self):
         if self.worker is not None:
@@ -180,19 +204,41 @@ class UpdateDialog(QDialog):
             return
         self.package = package
         kind = "OCR 모델 포함" if package.manifest["kind"] == "full" else "기존 OCR 모델 재사용"
-        self.status.setText(f"{__version__} → {package.manifest['version']}\n파일 검사 완료 · {kind}\n‘새 버전 폴더 준비’를 눌러 저장 위치를 선택하세요.")
+        self.status.setText(f"{__version__} → {package.manifest['version']}\n파일 검사 완료 · {kind}\n‘업데이트 준비’를 누르세요.")
+
+    def preparation_directory(self):
+        if self.install_target is not None:
+            self.workspace = temporary_workspace()
+            return str(self.workspace)
+        return QFileDialog.getExistingDirectory(self, "소스 실행 · 테스트용 새 버전 폴더를 만들 위치 선택", str(model_directory().parent.parent))
 
     def prepare_package(self):
-        parent = QFileDialog.getExistingDirectory(self, "새 버전 폴더를 만들 위치 선택", str(model_directory().parent.parent))
+        if self.install_target is not None:
+            self.handoff('local', self.package.path)
+            return
+        parent = self.preparation_directory()
         if not parent:
             return
         package = self.package
-        self.status.setText("새 버전 파일과 OCR 모델을 준비하고 있습니다…")
+        self.status.setText("임시 위치에서 업데이트 파일과 OCR 모델을 검사하고 있습니다…")
         self.run_operation(lambda worker: prepare_update(package.path, parent, model_directory(), __version__), self.prepared_package)
 
     def prepared_package(self, target):
         self.prepared = target
-        self.status.setText(f"준비 완료: {target}\n현재 앱을 닫은 뒤 새 폴더의 GTLeaderboard.exe를 실행하세요.\n문제가 있으면 기존 폴더의 실행 파일로 돌아갈 수 있습니다.")
+        if self.install_target is not None:
+            self.status.setText(f"준비 완료 · 적용 위치: {self.install_target}\n‘현재 리그 저장 후 업데이트 적용’을 누르면 앱을 종료하고 파일을 교체한 뒤 다시 실행합니다.")
+        else:
+            self.status.setText(f"테스트용 준비 완료: {target}\n소스 실행에서는 설치 파일을 교체하지 않습니다.")
+
+    def repair_installation(self):
+        if self.repair_target is None or self.worker is not None:
+            return
+        if self.install_target is not None:
+            self.handoff('repair')
+            return
+        self.workspace = temporary_workspace()
+        self.status.setText('현재 버전 파일을 검사하고 기존 설치 폴더로 복구할 준비를 합니다…')
+        self.run_operation(lambda worker: prepare_repair(self.current_install, self.workspace), self.prepared_package)
 
     def open_folder(self):
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(self.prepared)))
@@ -212,12 +258,52 @@ class UpdateDialog(QDialog):
                 self.status.setText('리그 저장이 완료되지 않아 현재 앱을 유지합니다.')
                 return
         arguments = [str(window.path.resolve())] if window.path is not None else []
+        if self.install_target is not None:
+            self.handoff('prepared', self.prepared)
+            return
         started, _ = QProcess.startDetached(str(executable), arguments, str(executable.parent))
         if not started:
             self.failed('새 버전을 실행하지 못했습니다. 현재 앱은 유지됩니다. 준비된 폴더에서 다시 실행하세요.')
             return
         self.reject()
         window.close()
+
+    def handoff(self, mode, package=None):
+        window = self.parent()
+        if self.external_request is not None or not hasattr(window, 'save'):
+            return
+        has_content = bool(window.league.drivers or window.league.rounds)
+        if window.dirty or window.editor_dirty or (has_content and window.path is None):
+            if not window.save():
+                self.status.setText('리그 저장이 완료되지 않아 현재 앱을 유지합니다.')
+                return
+        arguments = [str(window.path.resolve())] if window.path is not None else []
+        try:
+            self.external_request = start_updater(self.current_install, self.install_target, mode, arguments, package=package)
+        except Exception as exc:
+            self.failed(f'전용 업데이터를 시작하지 못했습니다. 현재 앱은 유지됩니다.\n{exc}')
+            return
+        self.handoff_started = time.monotonic()
+        self.status.setText('전용 업데이터를 여는 중입니다… 준비되면 현재 앱을 종료하고 업데이터에서 다운로드·설치를 진행합니다.')
+        self.refresh_buttons()
+        self.handoff_timer.start()
+
+    def poll_updater(self):
+        try:
+            ready = updater_ready(self.external_request)
+            if not ready and time.monotonic() - self.handoff_started < 90:
+                return
+        except Exception:
+            ready = False
+        self.handoff_timer.stop()
+        self.external_request = None
+        if ready:
+            window = self.parent()
+            self.reject()
+            window.close()
+        else:
+            self.refresh_buttons()
+            self.failed('전용 업데이터의 시작을 확인하지 못했습니다. 현재 앱은 유지됩니다.')
 
     def failed(self, message):
         self.status.setText(message)
@@ -234,6 +320,9 @@ class UpdateDialog(QDialog):
             super().reject()
 
     def reject(self):
+        if self.external_request is not None:
+            self.status.setText('전용 업데이터 시작을 확인하고 있습니다. 잠시 기다려 주세요.')
+            return
         if self.worker is not None:
             self.closing = True
             self.worker.requestInterruption()
@@ -241,6 +330,25 @@ class UpdateDialog(QDialog):
             self.status.setText("현재 파일 작업을 마친 뒤 닫습니다…")
             return
         super().reject()
+
+
+def offer_installation_repair(window):
+    current = installation_directory()
+    target = legacy_installation(current) if current else None
+    if target is None:
+        return False
+    notice = QMessageBox(QMessageBox.Icon.Information, '이전 업데이트 폴더 복구',
+                         f'이전 업데이터가 만든 중첩 폴더에서 실행 중입니다.\n\n기존 설치 위치: {target}\n\n현재 버전을 이 위치에 적용할 수 있습니다. 리그 파일과 중첩 폴더는 삭제하지 않습니다.',
+                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, window)
+    notice.setTextFormat(Qt.TextFormat.PlainText)
+    notice.button(QMessageBox.StandardButton.Yes).setText('복구 준비')
+    notice.button(QMessageBox.StandardButton.No).setText('나중에')
+    if notice.exec() != QMessageBox.StandardButton.Yes:
+        return False
+    dialog = UpdateDialog(window)
+    dialog.repair_installation()
+    dialog.exec()
+    return not window.isVisible()
 
 
 class StartupUpdateCheck(PackageWorker):

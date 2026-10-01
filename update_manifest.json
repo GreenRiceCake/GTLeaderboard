@@ -1,17 +1,17 @@
 {
   "app": "GTLeaderboard",
   "schema_version": 1,
-  "version": "1.1.0",
-  "title": "GTLeaderboard v1.1.0 업데이트",
-  "changelog": "- 라운드 수정·OCR 재반영·이전 결과 복원 시 변경 사유 입력을 없앴습니다. 수정 시각과 결과 이력은 자동으로 남습니다.\n- 리그 설정에 순위별 웨이트 증량·유지·감량과 누적 상한을 추가했습니다. 게임 한도인 200kg을 넘길 수 없습니다.\n- OCR 결과 반영 시 웨이트를 자동 계산합니다. 첫 등록은 실제 0kg, 다음 라운드는 이전 예정 중량을 기본값으로 사용합니다.\n- 라운드 결과에서 실제 적용 중량과 증감값을 수정할 수 있습니다. 직접 지정한 증감값은 유지되며, 예정 중량은 자동 계산 결과로 표시합니다.\n- 종합 순위와 PNG·CSV에는 최근 기록의 증감량과 예정 중량을 표시합니다.\n- PNG·GTLB와 변경 이력·실행 취소·작업 복구에 웨이트를 보관합니다. 이전 저장 파일을 읽을 수 있으며, 새로 저장한 파일은 1.1.0 이상에서 열어 주세요.",
+  "version": "1.1.1",
+  "title": "GTLeaderboard v1.1.1 업데이트",
+  "changelog": "- 전용 GTLeaderboardUpdater.exe를 추가했습니다. 앱에서 리그를 저장하고 업데이터를 실행하면 ZIP을 다운로드·검증하고 기존 설치 폴더에 덮어쓴 뒤 프로그램을 다시 실행합니다.\n- 리그 파일과 설정은 보존하고, 파일 교체 또는 새 앱 시작 실패 시 이전 프로그램 파일을 복원합니다. 업데이터도 함께 갱신합니다.\n- 이미 생긴 중첩 폴더를 감지하여 원래 설치 위치에 적용합니다. 중첩 폴더와 그 안의 리그는 자동 삭제하지 않습니다.\n- 기존 1.0.0·1.1.0 사용자는 최초 한 번 업데이터 전용 ZIP을 기존 프로그램 폴더에 풀어 GTLeaderboardUpdater.exe를 실행하거나, 최신 full ZIP을 직접 받아 주세요. 이전 앱 내부의 업데이터는 새 방식을 지원하지 않습니다.",
   "update_type": "zip",
-  "download_url": "https://github.com/GreenRiceCake/GTLeaderboard/releases/download/v1.1.0/GTLeaderboard-1.1.0-windows-x64-full.zip",
-  "min_updater_protocol": 1,
+  "download_url": "https://github.com/GreenRiceCake/GTLeaderboard/releases/download/v1.1.1/GTLeaderboard-1.1.1-windows-x64-full.zip",
+  "min_updater_protocol": 2,
   "transactional_package": {
     "type": "zip",
-    "url": "https://github.com/GreenRiceCake/GTLeaderboard/releases/download/v1.1.0/GTLeaderboard-1.1.0-windows-x64-full.zip",
-    "size": 86108012,
-    "sha256": "8f7c7f704d8cfb8df10e543ee4086c33700a7253050b8a7ac1e9bf6a6f10748b",
+    "url": "https://github.com/GreenRiceCake/GTLeaderboard/releases/download/v1.1.1/GTLeaderboard-1.1.1-windows-x64-full.zip",
+    "size": 135028363,
+    "sha256": "32cc5cc9a660abc691623203a52564ee28b64668b59bc29711bbdd4916d2ae39",
     "package_manifest": "release-manifest.json"
   }
 }

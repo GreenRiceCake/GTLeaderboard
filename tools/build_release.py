@@ -23,7 +23,7 @@ def source_zip(destination):
     files = list((ROOT / "gtleaderboard").rglob("*.py")) + list((ROOT / "gtleaderboard/data").glob("*.json"))
     files += [ROOT / name for name in ("run.pyw", "requirements.txt", "requirements-build.txt", "BUILDING.md", "RELEASE_NOTES.md", "models/README.md", "tools/build_release.py", "tools/setup_ocr.py", "tools/fetch_release_licenses.py", "tools/smoke_release.py")]
     files += [p for p in (ROOT / "packaging").rglob("*") if p.is_file()]
-    files += [ROOT / 'tools/make_update_manifest.py', ROOT / 'UPDATING.md']
+    files += [ROOT / 'run_updater.pyw', ROOT / 'tools/make_update_manifest.py', ROOT / 'tools/smoke_inplace_update.py', ROOT / 'UPDATING.md']
     with ZipFile(destination, "w", ZIP_DEFLATED) as archive:
         for path in sorted(files):
             archive.write(path, path.relative_to(ROOT).as_posix())
@@ -47,7 +47,7 @@ def copy_licenses(destination):
 
 
 def package_release(folder):
-    files = [folder / n for n in ("GTLeaderboard.exe", "README.txt", "RELEASE_NOTES.md", "BUILD_INFO.json", "SOURCE.zip", "VERSION.txt")]
+    files = [folder / n for n in ("GTLeaderboard.exe", "GTLeaderboardUpdater.exe", "README.txt", "RELEASE_NOTES.md", "BUILD_INFO.json", "SOURCE.zip", "VERSION.txt")]
     files += [p for p in (folder / "licenses").rglob("*") if p.is_file()]
     files += [folder / "models/README.md"]
     outputs = []
@@ -69,6 +69,16 @@ def package_release(folder):
             (folder / MANIFEST).write_text(json.dumps(manifest, indent=2), encoding="utf-8")
         outputs.append(output)
         print(f"{output.name}: {output.stat().st_size:,} bytes", flush=True)
+    standalone = ROOT / 'dist' / f'GTLeaderboardUpdater-{__version__}-windows-x64.zip'
+    with ZipFile(standalone, 'w', ZIP_DEFLATED) as archive:
+        archive.write(folder / 'GTLeaderboardUpdater.exe', 'GTLeaderboardUpdater.exe')
+        archive.write(folder / 'SOURCE.zip', 'SOURCE.zip')
+        archive.writestr('README_UPDATER.txt', 'GTLeaderboard 전용 업데이터\n\n이 ZIP을 기존 GTLeaderboard.exe가 있는 폴더에 모두 풀고\nGTLeaderboardUpdater.exe를 실행하세요. 최신 ZIP을 받아 같은 설치 위치에 적용합니다.\n다른 위치에서 실행했다면 기존 설치 폴더를 선택하세요.\n설치 전에 GTLeaderboard 창을 닫고 리그를 저장해 주세요.\nlicenses는 라이선스, SOURCE.zip은 재빌드용 소스입니다.\n')
+        for path in (folder / 'licenses').rglob('*'):
+            if path.is_file():
+                archive.write(path, path.relative_to(folder).as_posix())
+    outputs.append(standalone)
+    print(f'{standalone.name}: {standalone.stat().st_size:,} bytes', flush=True)
     manifest_path = make_manifest(outputs[0], ROOT / 'dist/update_manifest.json', ROOT / 'RELEASE_NOTES.md')
     outputs.append(manifest_path)
     (ROOT / "dist/SHA256SUMS.txt").write_text("".join(f"{digest_file(p)}  {p.name}\n" for p in outputs), encoding="ascii")
@@ -89,6 +99,10 @@ def main():
     if not args.repackage:
         work = ROOT / "build" / uuid4().hex
         work.mkdir(parents=True)
+        updater_command = [sys.executable, '-m', 'PyInstaller', '--noconfirm', '--windowed', '--onedir' if args.onedir else '--onefile', '--name', 'GTLeaderboardUpdater', '--distpath', str(work / 'updater-output'), '--workpath', str(work / 'updater-temp'), '--specpath', str(work), '--paths', str(ROOT), '--add-data', f"{ROOT / 'gtleaderboard/data/update_source.json'};gtleaderboard/data"]
+        for exclude in ('numpy', 'PIL', 'onnxruntime', 'torch', 'tensorflow', 'scipy', 'matplotlib', 'pandas', 'IPython', 'pytest', 'cv2', 'tkinter', 'PyQt5', 'PyQt6'):
+            updater_command += ['--exclude-module', exclude]
+        subprocess.run(updater_command + [str(ROOT / 'run_updater.pyw')], cwd=ROOT, check=True)
         release_version = tuple(map(int, __version__.split("."))) + (0,)
         version_file = work / "version.txt"
         version_file.write_text(f"VSVersionInfo(ffi=FixedFileInfo(filevers={release_version!r}, prodvers={release_version!r}, mask=0x3f, flags=0, OS=0x40004, fileType=1, subtype=0, date=(0,0)), kids=[StringFileInfo([StringTable('040904B0', [StringStruct('ProductName', 'GTLeaderboard'), StringStruct('FileDescription', 'GTLeaderboard'), StringStruct('FileVersion', '{__version__}'), StringStruct('ProductVersion', '{__version__}'), StringStruct('OriginalFilename', 'GTLeaderboard.exe')])]), VarFileInfo([VarStruct('Translation', [1033,1200])])])", encoding="utf-8")
@@ -98,11 +112,13 @@ def main():
         subprocess.run(command + [str(ROOT / "run.pyw")], cwd=ROOT, check=True)
         if args.onedir:
             output = work / "output/GTLeaderboard"
+            shutil.copytree(work / 'updater-output/GTLeaderboardUpdater', output, dirs_exist_ok=True)
             (output / "models").mkdir()
             shutil.copyfile(model, output / "models" / MODEL_NAME)
             print(f"Directory build: {output}")
             return
         shutil.copyfile(work / "output/GTLeaderboard.exe", folder / "GTLeaderboard.exe")
+        shutil.copyfile(work / 'updater-output/GTLeaderboardUpdater.exe', folder / 'GTLeaderboardUpdater.exe')
         info = {"version": __version__, "python": platform.python_version(), "platform": platform.platform(), "builtAt": datetime.now(timezone.utc).isoformat(), "packages": {p: version(p) for p in ("PySide6", "Pillow", "numpy", "onnxruntime", "pyinstaller")}}
         (folder / "BUILD_INFO.json").write_text(json.dumps(info, indent=2), encoding="utf-8")
     shutil.copyfile(ROOT / "packaging/README.txt", folder / "README.txt")

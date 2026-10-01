@@ -15,7 +15,7 @@ from .domain import ValidationError
 MAX_PACKAGE = 1024 * 1024 * 1024
 MAX_FILES = 1000
 MANIFEST = "release-manifest.json"
-ROOT_FILES = {"GTLeaderboard.exe", "README.txt", "RELEASE_NOTES.md", "BUILD_INFO.json", "SOURCE.zip", "VERSION.txt"}
+ROOT_FILES = {"GTLeaderboard.exe", "GTLeaderboardUpdater.exe", "README.txt", "RELEASE_NOTES.md", "BUILD_INFO.json", "SOURCE.zip", "VERSION.txt"}
 
 
 def version_tuple(value):
