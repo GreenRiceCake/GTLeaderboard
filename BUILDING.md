@@ -19,11 +19,11 @@ python -m venv .venv
 ## 검증
 
 소스 저장소의 테스트와 빌드한 EXE의 자체 검사를 실행합니다.
-아래 경로의 `1.0.0`은 빌드한 버전에 맞게 바꿉니다.
+아래 경로의 `1.1.0`은 빌드한 버전에 맞게 바꿉니다.
 
 ```powershell
 .\.venv\Scripts\python.exe -m unittest discover -s tests
-.\.venv\Scripts\python.exe tools/smoke_release.py dist/GTLeaderboard-1.0.0-windows-x64/GTLeaderboard.exe
+.\.venv\Scripts\python.exe tools/smoke_release.py dist/GTLeaderboard-1.1.0-windows-x64/GTLeaderboard.exe
 ```
 
 배포 ZIP에 포함된 `SOURCE.zip`은 재빌드용 소스이며 테스트 자료는 포함하지 않습니다.
@@ -31,13 +31,13 @@ python -m venv .venv
 
 ## 생성되는 파일
 
-버전이 `1.0.0`일 때 `dist` 폴더에 다음 파일이 생성됩니다.
+버전이 `1.1.0`일 때 `dist` 폴더에 다음 파일이 생성됩니다.
 
 | 파일 | 내용 |
 | --- | --- |
-| `GTLeaderboard-1.0.0-windows-x64/` | EXE, 외부 OCR 모델, 사용법, 라이선스, 소스 등 실행 구성 |
-| `GTLeaderboard-1.0.0-windows-x64-full.zip` | OCR 모델을 포함한 전체 배포 ZIP |
-| `GTLeaderboard-1.0.0-windows-x64-update.zip` | OCR 모델 파일을 제외한 수동 업데이트 ZIP |
+| `GTLeaderboard-1.1.0-windows-x64/` | EXE, 외부 OCR 모델, 사용법, 라이선스, 소스 등 실행 구성 |
+| `GTLeaderboard-1.1.0-windows-x64-full.zip` | OCR 모델을 포함한 전체 배포 ZIP |
+| `GTLeaderboard-1.1.0-windows-x64-update.zip` | OCR 모델 파일을 제외한 수동 업데이트 ZIP |
 | `update_manifest.json` | 전체 ZIP의 버전·다운로드 주소·크기·SHA-256 |
 | `SHA256SUMS.txt` | 두 ZIP과 업데이트 매니페스트의 체크섬 |
 

@@ -6,7 +6,7 @@ from PySide6.QtGui import QColor, QFont, QFontMetricsF, QImage, QPainter
 
 from .domain import ValidationError, standings, validate_league
 from .storage import atomic_write
-from .sheet_content import bonus_description, footer_note, round_display, season_caption, stack_description
+from .sheet_content import bonus_description, footer_note, round_display, season_caption, stack_description, weight_cells, weight_summary, weight_rule_lines
 
 NAVY = "#142638"
 INK = "#203449"
@@ -45,14 +45,14 @@ def measure_sheet(league):
     rows = standings(league)
     name_width = min(330, max(230, int(max((QFontMetricsF(font(17, True)).horizontalAdvance(d.name) for d in league.drivers), default=0)) + 32))
     round_width = max(132, (1280 - 64 - 60 - name_width - 116) // max(1, len(league.rounds)))
-    columns = [60, name_width] + [round_width] * len(league.rounds) + [116]
+    columns = [60, name_width] + [round_width] * len(league.rounds) + ([100, 100] if league.rules.weight.enabled else []) + [116]
     if not league.rounds:
         columns[1] = max(columns[1], 1040)
     width = sum(columns) + 64
     title_height = max(118, int(text_height(league.name, width - 100, 30, True)) + 76)
     header_height = max([84] + [int(text_height(r.name, round_width - 20, 16, True) + text_height(r.track_name, round_width - 20, 13)) + 34 for r in league.rounds])
     row_heights = [max(36, int(text_height(r["name"], name_width - 28, 17, True)) + 14) for r in rows]
-    footer_height = 218
+    footer_height = 318 if league.rules.weight.enabled else 218
     return SheetLayout(width, title_height + header_height + sum(row_heights) + footer_height + 64, columns, title_height, header_height, row_heights, rows, footer_height)
 
 
@@ -101,6 +101,9 @@ def render_sheet(league, scale=2):
                 text(x + 14, y, col_width - 28, layout.header_height, "드라이버", 15, bold=True)
             elif total:
                 text(x, y, col_width, layout.header_height, "총 포인트", 15, "#ffffff", True, CENTER)
+            elif index >= 2 + len(league.rounds):
+                label = "증감 (kg)" if index == 2 + len(league.rounds) else "예정 (kg)"
+                text(x, y, col_width, layout.header_height, label, 14, TEAL, True, CENTER)
             else:
                 rnd = league.rounds[index - 2]
                 name_height = int(text_height(rnd.name, col_width - 20, 16, True)) + 4
@@ -119,7 +122,7 @@ def render_sheet(league, scale=2):
             x += layout.columns[0]
             text(x + 14, y, layout.columns[1] - 28, height, row["name"], 17, INK, True)
             x += layout.columns[1]
-            for rnd, points, col_width in zip(league.rounds, row["points"], layout.columns[2:-1]):
+            for rnd, points, col_width in zip(league.rounds, row["points"], layout.columns[2:2 + len(league.rounds)]):
                 result = rnd.results.get(row["id"]) if rnd.confirmed else None
                 value, color, size = round_display(rnd, row["id"], points), INK, 17
                 if result is not None and result.status not in ("FINISHED", "POINTS"):
@@ -128,6 +131,10 @@ def render_sheet(league, scale=2):
                     rect(x, y, col_width, height, "#eff3f6")
                 text(x + 6, y, col_width - 12, height, value, size, color, align=CENTER)
                 x += col_width
+            if league.rules.weight.enabled:
+                for value, col_width in zip(weight_cells(row), layout.columns[-3:-1]):
+                    text(x, y, col_width, height, value, 16, TEAL, True, CENTER)
+                    x += col_width
             rect(x, y, layout.columns[-1], height, "#e4f3ef")
             text(x, y, layout.columns[-1], height, row["total"], 22, TEAL, True, CENTER)
             rect(32, y + height - 1, content, 1, "#e3eaf0")
@@ -158,6 +165,11 @@ def render_sheet(league, scale=2):
         stack = stack_description(league.rules)
         text(right_x + 16, y + 139, right_width - 32, 24, stack, 12, MUTED)
         note = footer_note(league)
+        if league.rules.weight.enabled:
+            text(32, y + 178, content, 26, weight_summary(league), 14, TEAL, True)
+            for index, line in enumerate(weight_rule_lines(league)):
+                text(32, y + 207 + index * 24, content, 24, line, 12, MUTED)
+            y += 100
         text(32, y + 183, content, 25, note, 12, MUTED)
         text(32, layout.height - 28, content, 18, "GTLeaderboard", 11, MUTED, align=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
     finally:

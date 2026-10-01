@@ -7,7 +7,7 @@ import zlib
 
 from PySide6.QtCore import QLockFile
 
-from .domain import ValidationError
+from .domain import ValidationError, WeightRecord, validate_weight
 from .storage import atomic_write, deserialize_league, serialize_league
 
 
@@ -99,9 +99,13 @@ class RecoveryStore:
             if data['draft'] and not rnd:
                 raise ValueError()
             for key, values in data['draft'].items():
-                if key not in allowed or not isinstance(values, list) or len(values) != 6:
+                if key not in allowed or not isinstance(values, list) or len(values) not in (6, 7):
                     raise ValueError()
-                status, position, pole, fastest, penalty, note = values
+                status, position, pole, fastest, penalty, note = values[:6]
+                if len(values) == 7:
+                    if not league.rules.weight.enabled:
+                        raise ValueError()
+                    validate_weight(WeightRecord(**values[6]))
                 if status not in ('', 'FINISHED', 'DNS', 'DNQ', 'DNF', 'DSQ', 'POINTS'):
                     raise ValueError()
                 if status == 'POINTS' and (key not in rnd.results or rnd.results[key].status != 'POINTS'):

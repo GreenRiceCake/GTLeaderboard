@@ -8,6 +8,23 @@ from uuid import uuid4
 
 STATUSES = ("FINISHED", "DNS", "DNQ", "DNF", "DSQ")
 DEFAULT_POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1, 1, 1, 1, 1, 1, 1]
+MAX_BALLAST_KG = 200
+
+
+@dataclass
+class WeightRules:
+    enabled: bool = False
+    position_changes: list[int] = field(default_factory=lambda: [0] * 16)
+    max_total: int = MAX_BALLAST_KG
+
+
+@dataclass
+class WeightRecord:
+    actual: int = 0
+    change: int = 0
+    planned: int = 0
+    change_manual: bool = False
+    planned_manual: bool = False  # Read old snapshots; new calculations always clear this.
 
 
 class ValidationError(ValueError):
@@ -52,6 +69,7 @@ class Rules:
     pole: Bonus = field(default_factory=Bonus)
     fastest: Bonus = field(default_factory=Bonus)
     stack_bonuses: bool = True
+    weight: WeightRules = field(default_factory=WeightRules)
 
 
 @dataclass
@@ -74,6 +92,7 @@ class Result:
     best_lap_ms: int | None = None
     raw: dict[str, str] = field(default_factory=dict)
     recorded_points: int | None = None  # Historical table score; race details unknown.
+    weight: WeightRecord | None = None
 
 
 @dataclass
@@ -108,6 +127,13 @@ class League:
 
 
 def validate_rules(rules):
+    weight = rules.weight
+    boolean(weight.enabled, "웨이트 사용")
+    integer(weight.max_total, "누적 웨이트 상한", 0, MAX_BALLAST_KG)
+    if len(weight.position_changes) != 16:
+        raise ValidationError("1~16위 웨이트 증감량을 모두 지정하세요.")
+    for amount in weight.position_changes:
+        integer(amount, "순위별 웨이트 증감량", -MAX_BALLAST_KG, MAX_BALLAST_KG)
     if len(rules.position_points) != 16:
         raise ValidationError("1~16위 배점을 모두 지정해야 합니다.")
     for value in rules.position_points:
@@ -129,6 +155,8 @@ def validate_results(results, roster, unique_bonuses=True):
         raise ValidationError("라운드 참가자 목록에 없는 드라이버의 결과입니다.")
     positions = []
     for result in results.values():
+        if result.weight is not None:
+            validate_weight(result.weight)
         if result.status not in (*STATUSES, "POINTS"):
             raise ValidationError("지원하지 않는 출전 상태입니다.")
         if result.status == "POINTS":
@@ -258,7 +286,7 @@ def remove_round(league, round_id):
     league.rounds = candidate.rounds
 
 
-def apply_results(league, round_id, supplied, reason):
+def apply_results(league, round_id, supplied, reason="", *, recalculate_weights=True):
     """Commit a full manually reviewed sheet, fill absent roster members with DNS."""
     rnd = next(r for r in league.rounds if r.id == round_id)
     roster = rnd.roster if rnd.confirmed else [d.id for d in league.drivers]
@@ -266,10 +294,21 @@ def apply_results(league, round_id, supplied, reason):
         raise ValidationError("먼저 드라이버를 등록하세요.")
     validate_results(supplied, roster)
     results = {driver_id: deepcopy(supplied.get(driver_id, Result(source="auto_dns"))) for driver_id in roster}
+    if league.rules.weight.enabled and recalculate_weights:
+        for driver_id, result in results.items():
+            old = rnd.results.get(driver_id)
+            # Reading/saving or changing rules must never rewrite past race weights.
+            if old is not None and old.weight is not None and result.weight == old.weight and (result.status, result.position) == (old.status, old.position):
+                continue
+            if result.weight is None:
+                result.weight = WeightRecord(actual=previous_weight(league, round_id, driver_id))
+            result.weight = calculate_weight(result.weight, result, league.rules.weight)
+            validate_weight_limits(result.weight, league.rules.weight)
     validate_results(results, roster)
     if rnd.confirmed and results == rnd.results:
         return False
-    text(reason, "변경 사유", maximum=2000)
+    text(reason, "변경 기록", allow_empty=True, maximum=2000)
+    reason = reason.strip() or ("경기 결과 수정" if rnd.confirmed else "최초 결과 입력")
     rnd.roster = roster.copy()
     rnd.results = results
     rnd.confirmed = True
@@ -302,7 +341,10 @@ def standings(league):
     rows = []
     for driver in league.drivers:
         points = [score(r.results[driver.id], league.rules) if r.confirmed and driver.id in r.results else None for r in league.rounds]
-        rows.append({"id": driver.id, "name": driver.name, "points": points, "total": sum(p for p in points if p is not None)})
+        weight_round = next((r for r in reversed(league.rounds) if r.confirmed and driver.id in r.results and r.results[driver.id].weight is not None), None)
+        rows.append({"id": driver.id, "name": driver.name, "points": points, "total": sum(p for p in points if p is not None),
+                     "weight": weight_round.results[driver.id].weight if weight_round else None,
+                     "weight_round": weight_round.name if weight_round else ""})
     rows.sort(key=lambda row: (-row["total"], row["name"].casefold()))
     previous, rank = None, 0
     for index, row in enumerate(rows, 1):
@@ -314,4 +356,42 @@ def standings(league):
 
 
 def rules_from_dict(data):
-    return Rules(**{**data, "pole": Bonus(**data["pole"]), "fastest": Bonus(**data["fastest"])})
+    return Rules(**{**data, "pole": Bonus(**data["pole"]), "fastest": Bonus(**data["fastest"]),
+                    "weight": WeightRules(**data.get("weight", {}))})
+
+
+def validate_weight(weight):
+    integer(weight.actual, "실제 적용 중량", 0, MAX_BALLAST_KG)
+    integer(weight.change, "웨이트 증감량", -MAX_BALLAST_KG, MAX_BALLAST_KG)
+    integer(weight.planned, "예정 중량", 0, MAX_BALLAST_KG)
+    boolean(weight.change_manual, "증감량 직접 지정")
+    boolean(weight.planned_manual, "예정 중량 직접 지정")
+
+
+def validate_weight_limits(weight, rules):
+    if weight.planned > rules.max_total:
+        raise ValidationError("예정 중량이 리그 웨이트 상한을 넘습니다. 실제 중량과 증감값을 확인하세요.")
+
+
+def previous_weight(league, round_id, driver_id):
+    previous = 0
+    for rnd in league.rounds:
+        if rnd.id == round_id:
+            return previous
+        result = rnd.results.get(driver_id)
+        if rnd.confirmed and result is not None and result.weight is not None:
+            previous = result.weight.planned
+    raise ValidationError("웨이트를 적용할 라운드를 찾을 수 없습니다.")
+
+
+def calculate_weight(weight, result, rules):
+    value = deepcopy(weight)
+    if not value.change_manual:
+        value.change = rules.position_changes[result.position - 1] if result.status == "FINISHED" and result.position else 0
+    value.planned = max(0, min(rules.max_total, value.actual + value.change))
+    value.planned_manual = False
+    return value
+
+
+def result_from_dict(data):
+    return Result(**{**data, "weight": WeightRecord(**data["weight"]) if data.get("weight") is not None else None})

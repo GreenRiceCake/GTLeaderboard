@@ -54,7 +54,7 @@ class OnlineUpdateTests(unittest.TestCase):
         self.zip = self.directory / 'test-full.zip'
         payload = {'GTLeaderboard.exe': b'fake exe', 'models/test.onnx': b'test model'}
         model = {'file': 'models/test.onnx', 'sha256': sha256(b'test model').hexdigest()}
-        package = {'format': 'GTLeaderboardRelease', 'schemaVersion': 1, 'version': '9.0.0', 'platform': 'windows-x64', 'kind': 'full', 'leagueSchema': {'min': 1, 'max': 3}, 'model': model, 'files': {name: {'size': len(data), 'sha256': sha256(data).hexdigest()} for name, data in payload.items()}}
+        package = {'format': 'GTLeaderboardRelease', 'schemaVersion': 1, 'version': '9.0.0', 'platform': 'windows-x64', 'kind': 'full', 'leagueSchema': {'min': 1, 'max': 4}, 'model': model, 'files': {name: {'size': len(data), 'sha256': sha256(data).hexdigest()} for name, data in payload.items()}}
         with ZipFile(self.zip, 'w') as archive:
             for name, value in payload.items():
                 archive.writestr(name, value)

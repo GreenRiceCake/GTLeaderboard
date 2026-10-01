@@ -48,10 +48,11 @@ class UiWorkflowTests(unittest.TestCase):
         self.assertEqual(standings(window.league)[0]["total"], 28)
         window.row_widgets[a][1].setValue(2)
         window.row_widgets[b][1].setValue(1)
-        window.reason.setText("심사 반영")
         QTest.mouseClick(window.apply_button, Qt.MouseButton.LeftButton)
         self.assertEqual(standings(window.league)[0]["id"], b)
         self.assertEqual(len(rnd.history), 2)
+        self.assertEqual([rev.reason for rev in rnd.history], ["최초 결과 입력", "경기 결과 수정"])
+        self.assertFalse(hasattr(window, "reason"))
         with WorkspaceDirectory() as folder:
             window.path = Path(folder) / "저장.png"
             self.assertTrue(window.save())

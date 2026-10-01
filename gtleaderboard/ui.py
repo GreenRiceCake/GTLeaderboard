@@ -17,12 +17,15 @@ from PySide6.QtWidgets import (
 from . import __version__
 from .catalog import load_catalog
 from .domain import (
-    Bonus, League, Result, Round, Rules, STATUSES, ValidationError,
+    Bonus, League, Result, Round, Rules, STATUSES, ValidationError, WeightRecord,
+    calculate_weight, previous_weight,
     add_drivers, apply_results, score, standings, update_rules, validate_league,
 )
 from .storage import load_league, load_rules, save_league, save_rules, serialize_league
 from .widgets import FixedTotalPane, SearchableComboBox, WrappedHeader
 from .workflow_ui import WorkflowMixin
+from .weight_ui import WeightRow, WeightRulesPanel
+from .sheet_content import weight_cells
 
 
 STATUS_LABELS = {"": "미입력", "FINISHED": "완주", "DNS": "DNS", "DNQ": "DNQ", "DNF": "DNF", "DSQ": "DSQ", "POINTS": "점수만 보존"}
@@ -95,15 +98,22 @@ def item(text, center=False):
 class RulesDialog(QDialog):
     def __init__(self, league, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("리그 이름 · 배점과 보너스")
+        self.setWindowTitle("리그 설정 · 배점과 웨이트")
         self.resize(740, 700)
-        layout = QVBoxLayout(self)
+        outer = QVBoxLayout(self)
+        tabs = QTabWidget()
+        outer.addWidget(tabs)
+        points_page = QWidget()
+        layout = QVBoxLayout(points_page)
+        tabs.addTab(points_page, "리그 · 배점")
+        self.weight_panel = WeightRulesPanel(league.rules.weight)
+        tabs.addTab(self.weight_panel, "웨이트")
         self.name = QLineEdit(league.name)
         self.name.setMaxLength(200)
         form = QFormLayout()
         form.addRow("리그 이름", self.name)
         layout.addLayout(form)
-        notice = QLabel("설정을 적용하면 경기 결과를 새 규칙으로 다시 계산합니다. 종합표에서 점수만 보존한 기록은 고정됩니다.")
+        notice = QLabel("배점을 바꾸면 경기 점수를 다시 계산합니다. 종합표에서 옮긴 고정 점수와 이미 기록한 웨이트는 유지됩니다.")
         notice.setWordWrap(True)
         layout.addWidget(notice)
         points_box = QGroupBox("결승 순위별 배점 · 정수 점수")
@@ -150,11 +160,11 @@ class RulesDialog(QDialog):
         buttons.button(QDialogButtonBox.StandardButton.Cancel).setText("취소")
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
+        outer.addWidget(buttons)
 
     def values(self):
         bonuses = [Bonus(a.isChecked(), b.value(), c.isChecked(), d.value()) for a, b, c, d in self.bonuses]
-        return Rules([p.value() for p in self.points], {s: p.value() for s, p in self.statuses.items()}, *bonuses, self.stacking.isChecked())
+        return Rules([p.value() for p in self.points], {s: p.value() for s, p in self.statuses.items()}, *bonuses, self.stacking.isChecked(), self.weight_panel.value())
 
 
 class RoundDialog(QDialog):
@@ -221,7 +231,7 @@ class MainWindow(WorkflowMixin, QMainWindow):
         title_box.addWidget(subtitle)
         heading.addLayout(title_box)
         heading.addStretch()
-        for label, callback in (("새 리그", self.new_league), ("열기", self.open_league), ("저장", self.save), ("다른 이름으로 저장", self.save_as), ("배점 설정", self.edit_rules)):
+        for label, callback in (("새 리그", self.new_league), ("열기", self.open_league), ("저장", self.save), ("다른 이름으로 저장", self.save_as), ("리그 설정", self.edit_rules)):
             heading.addWidget(button(label, callback, label == "저장"))
         export_button = QPushButton("내보내기")
         export_menu = QMenu(export_button)
@@ -306,19 +316,18 @@ class MainWindow(WorkflowMixin, QMainWindow):
         self.round_info = QLabel()
         self.round_info.setWordWrap(True)
         layout.addWidget(self.round_info)
-        hint = QLabel("순위나 상태를 입력한 뒤 결과를 반영하세요. 미입력 드라이버는 자동 DNS가 됩니다.\n심사 정정 시 영향받는 순위를 함께 수정하고 변경 사유를 남겨 주세요.")
+        hint = QLabel("순위나 상태를 입력한 뒤 결과를 반영하세요. 미입력 드라이버는 자동 DNS가 됩니다.\n심사 정정 시 영향받는 순위를 함께 수정하세요. 수정 이력은 자동으로 남습니다.")
         hint.setObjectName("subtitle")
         layout.addWidget(hint)
-        self.results_table = table(["드라이버", "상태", "결승 순위", "예선 폴", "패스티스트랩", "벌점", "메모 / 벌점 사유"])
+        self.results_table = table(["드라이버", "상태", "결승 순위", "예선 폴", "패스티스트랩", "벌점", "메모 / 벌점 사유", "실제 적용 (kg)", "증감 (kg)", "예정 (kg)"])
         for col, width in enumerate((185, 115, 95, 70, 115, 85)):
             self.results_table.setColumnWidth(col, width)
         layout.addWidget(self.results_table, 1)
+        self.weight_reset = button("선택 선수 웨이트 규칙 재계산", self.recalculate_selected_weight)
+        self.weight_reset.setToolTip("선택한 행의 실제 중량은 유지하고, 직접 지정한 증감값을 현재 순위 규칙으로 되돌려 예정 중량을 계산합니다. 결과 반영 후 저장됩니다.")
+        layout.addWidget(self.weight_reset)
         bottom = QHBoxLayout()
-        self.reason = QLineEdit()
-        self.reason.setMaxLength(2000)
-        self.reason.setPlaceholderText("변경 사유 · 예: R01 2번 드라이버 심사 결과 반영")
-        self.reason.textEdited.connect(self.editor_changed)
-        bottom.addWidget(self.reason, 1)
+        bottom.addStretch(1)
         self.apply_button = button("결과 반영 · 미입력 DNS", self.apply_editor, True)
         bottom.addWidget(self.apply_button)
         layout.addLayout(bottom)
@@ -383,7 +392,10 @@ class MainWindow(WorkflowMixin, QMainWindow):
     def render_standings(self):
         confirmed = sum(r.confirmed for r in self.league.rounds)
         self.metrics.setText(f"{self.league.name}     /     드라이버 {len(self.league.drivers)}명     /     진행 {confirmed} / {len(self.league.rounds)} 라운드")
-        headers = ["순위", "드라이버"] + [f"{r.name}\n{r.track_name}" for r in self.league.rounds] + ["총 포인트"]
+        headers = ["순위", "드라이버"] + [f"{r.name}\n{r.track_name}" for r in self.league.rounds]
+        if self.league.rules.weight.enabled:
+            headers += ["증감 (kg)", "예정 (kg)"]
+        headers += ["총 포인트"]
         grid = self.standings_table
         grid.setColumnCount(len(headers))
         grid.setHorizontalHeaderLabels(headers)
@@ -392,6 +404,9 @@ class MainWindow(WorkflowMixin, QMainWindow):
         grid.setColumnWidth(1, 195)
         for col in range(2, len(headers) - 1):
             grid.setColumnWidth(col, 200)
+        if self.league.rules.weight.enabled:
+            for col in (len(headers) - 3, len(headers) - 2):
+                grid.setColumnWidth(col, 115)
         rows = standings(self.league)
         for row, standing in enumerate(rows):
             grid.setItem(row, 0, item(standing["rank"] if confirmed else "—", True))
@@ -407,6 +422,11 @@ class MainWindow(WorkflowMixin, QMainWindow):
                     if result.status == "POINTS":
                         cell.setToolTip(f"종합표 점수 {points}점 · 결승 순위·완주 상태·보너스 내역 미확인\n{result.note}")
                 grid.setItem(row, col, cell)
+            if self.league.rules.weight.enabled:
+                for col, value in zip((len(headers) - 3, len(headers) - 2), weight_cells(standing)):
+                    cell = item(value, True)
+                    cell.setToolTip(f"{standing['weight_round'] or '기록 없음'} 기준 · 증감은 부여량이며, 예정은 실제 중량에 증감량을 더한 뒤 상한을 적용한 값입니다.")
+                    grid.setItem(row, col, cell)
             total = item(standing["total"], True)
             total.setForeground(QColor("#007f79"))
             font = total.font()
@@ -420,8 +440,16 @@ class MainWindow(WorkflowMixin, QMainWindow):
     def render_results(self):
         rnd = self.current_round()
         self.row_widgets = {}
+        self.weight_widgets = {}
+        self.weight_driver_rows = []
+        for col in (7, 8, 9):
+            self.results_table.setColumnHidden(col, not self.league.rules.weight.enabled)
+        widths = (150, 95, 85, 65, 95, 70, 155, 125, 125, 125) if self.league.rules.weight.enabled else (185, 115, 95, 70, 115, 85, 220)
+        for col, width in enumerate(widths):
+            self.results_table.setColumnWidth(col, width)
+        self.weight_reset.setVisible(self.league.rules.weight.enabled)
+        self.weight_reset.setEnabled(rnd is not None)
         self.results_table.setRowCount(0)
-        self.reason.setText("")
         self.editor_dirty = False
         for b in (self.apply_button, self.track_button, self.history_button, self.ocr_button, self.manage_rounds_button):
             b.setEnabled(rnd is not None)
@@ -465,7 +493,32 @@ class MainWindow(WorkflowMixin, QMainWindow):
             fastest.toggled.connect(lambda checked, key=driver.id: self.bonus_changed(key, 3, checked))
             penalty.valueChanged.connect(self.editor_changed)
             note.textEdited.connect(self.editor_changed)
+            if self.league.rules.weight.enabled:
+                weight = deepcopy(result.weight) if result and result.weight else calculate_weight(
+                    WeightRecord(actual=previous_weight(self.league, rnd.id, driver.id)), result or Result(), self.league.rules.weight)
+                editor = WeightRow(weight, result or Result(), self.league.rules.weight, self.editor_changed)
+                self.weight_widgets[driver.id] = editor
+                self.weight_driver_rows.append(driver.id)
+                for col, field in enumerate(editor.fields, 7):
+                    self.results_table.setCellWidget(row, col, field)
+                status.currentIndexChanged.connect(lambda _, key=driver.id: self.weight_rank_changed(key))
+                position.valueChanged.connect(lambda _, key=driver.id: self.weight_rank_changed(key))
         self.update_title()
+
+    def weight_rank_changed(self, driver_id):
+        fields = self.row_widgets[driver_id]
+        self.weight_widgets[driver_id].recalculate(Result(fields[0].currentData() or "DNS", fields[1].value() or None))
+
+    def recalculate_selected_weight(self):
+        rows = {index.row() for index in self.results_table.selectionModel().selectedRows()}
+        if not rows:
+            self.statusBar().showMessage("웨이트를 재계산할 드라이버 행을 선택하세요.")
+            return
+        for row in rows:
+            driver_id = self.weight_driver_rows[row]
+            self.weight_rank_changed(driver_id)
+            self.weight_widgets[driver_id].recalculate(reset=True)
+        self.editor_changed()
 
     def bonus_changed(self, driver_id, column, checked):
         if checked:
@@ -489,12 +542,16 @@ class MainWindow(WorkflowMixin, QMainWindow):
         rnd = self.current_round()
         for driver_id, (status, position, pole, fastest, penalty, note) in self.row_widgets.items():
             code = status.currentData()
+            weight = self.weight_widgets[driver_id].value() if driver_id in self.weight_widgets else None
             if not code:
                 if position.value() or pole.isChecked() or fastest.isChecked() or penalty.value() or note.text().strip():
                     raise ValidationError("기록이 있는 행의 출전 상태를 선택하세요.")
+                if weight is not None:
+                    supplied[driver_id] = Result(source="auto_dns", weight=weight)
                 continue
             result = Result(code, position.value() or None, pole.isChecked(), fastest.isChecked(), penalty.value(), note.text().strip())
             old = rnd.results.get(driver_id)
+            result.weight = weight if self.league.rules.weight.enabled else deepcopy(old.weight) if old else None
             if old:
                 if code == "POINTS":
                     result.recorded_points = old.recorded_points
@@ -511,8 +568,7 @@ class MainWindow(WorkflowMixin, QMainWindow):
         if not rnd:
             return False
         try:
-            reason = self.reason.text().strip() or ("최초 결과 입력" if not rnd.confirmed else "")
-            changed = apply_results(self.league, rnd.id, self.collect_results(), reason)
+            changed = apply_results(self.league, rnd.id, self.collect_results())
         except ValidationError as exc:
             self.error(exc)
             return False
@@ -720,9 +776,12 @@ class MainWindow(WorkflowMixin, QMainWindow):
         names = {d.id: d.name for d in self.league.drivers}
         lines = []
         for revision in reversed(rnd.history):
-            lines.append(f"개정 {revision.number}  |  {revision.at}\n사유: {revision.reason}")
+            lines.append(f"개정 {revision.number}  |  {revision.at}\n기록: {revision.reason}")
             for driver_id, result in revision.results.items():
                 lines.append(f"  {names[driver_id]} · {result.position or '—'}위 / {STATUS_LABELS[result.status]} / 폴 {result.pole} / 패스티스트랩 {result.fastest} / 벌점 {result.penalty}\n    {result.note}")
+                if result.weight is not None:
+                    w = result.weight
+                    lines.append(f"    웨이트: 실제 {w.actual}kg / 증감 {w.change:+d}kg / 예정 {w.planned}kg")
             lines.append("")
         viewer.setPlainText("\n".join(lines) or "아직 반영한 경기 결과가 없습니다.")
         layout.addWidget(viewer)
@@ -733,11 +792,8 @@ class MainWindow(WorkflowMixin, QMainWindow):
             layout.addWidget(choices)
 
             def restore():
-                reason, accepted = QInputDialog.getText(dialog, '이전 결과 복원', '복원 사유 (기존 이력을 유지하고 새 개정으로 추가합니다)')
-                if not accepted:
-                    return
                 try:
-                    changed = self.restore_revision(choices.currentData(), reason)
+                    changed = self.restore_revision(choices.currentData())
                     if changed:
                         dialog.accept()
                         self.statusBar().showMessage('이전 결과를 새 개정으로 복원했습니다. PNG로 저장하세요.')

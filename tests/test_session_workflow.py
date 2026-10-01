@@ -78,12 +78,12 @@ class SessionWorkflowTests(unittest.TestCase):
         window.mark_dirty()
         window.refresh()
         before = deepcopy(window.current_round().history)
-        self.assertTrue(window.restore_revision(1, '심사 재검토'))
+        self.assertTrue(window.restore_revision(1))
         self.assertEqual(window.current_round().history[:2], before)
         self.assertEqual(window.current_round().history[-1].number, 3)
         self.assertEqual(window.current_round().results, before[0].results)
-        with self.assertRaises(ValidationError):
-            window.restore_revision(1, ' ')
+        self.assertEqual(window.current_round().history[-1].reason, '개정 1 복원')
+        self.assertFalse(window.restore_revision(1))
 
     def test_recovery_preserves_invalid_unapplied_draft_and_source_png(self):
         window = self.window
@@ -93,7 +93,6 @@ class SessionWorkflowTests(unittest.TestCase):
         a, b = list(window.row_widgets)
         window.row_widgets[a][1].setValue(1)
         window.row_widgets[b][1].setValue(1)
-        window.reason.setText('입력 중')
         self.assertTrue(window.write_recovery())
         data, league = window.recovery.read(window.recovery.path)
         window.restore_snapshot(data, league)
@@ -102,7 +101,7 @@ class SessionWorkflowTests(unittest.TestCase):
         self.assertTrue(window.dirty)
         self.assertEqual(window.row_widgets[a][1].value(), 1)
         self.assertEqual(window.row_widgets[b][1].value(), 1)
-        self.assertEqual(window.reason.text(), '입력 중')
+        self.assertFalse(hasattr(window, 'reason'))
         self.assertFalse(window.current_round().confirmed)
         self.assertEqual((self.root / 'original.png').read_bytes(), original)
         self.assertEqual(window.png_suggestion.name, 'original_복구.png')

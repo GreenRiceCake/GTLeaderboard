@@ -3,7 +3,7 @@ import csv
 from io import StringIO
 
 from .domain import standings, validate_league
-from .sheet_content import bonus_description, footer_note, round_display, season_caption, stack_description
+from .sheet_content import bonus_description, footer_note, round_display, season_caption, stack_description, weight_cells, weight_summary, weight_rule_lines
 from .storage import atomic_write
 
 
@@ -11,13 +11,14 @@ def visible_rows(league):
     validate_league(league)
     rows = [
         ["GT LEAGUE  /  SEASON STANDINGS"], [league.name], [season_caption(league)], [],
-        ["순위", "드라이버", *[r.name for r in league.rounds], "총 포인트"],
-        ["", "", *[r.track_name for r in league.rounds], ""],
+        ["순위", "드라이버", *[r.name for r in league.rounds], *(["증감 (kg)", "예정 (kg)"] if league.rules.weight.enabled else []), "총 포인트"],
+        ["", "", *[r.track_name for r in league.rounds], *(["", ""] if league.rules.weight.enabled else []), ""],
     ]
     confirmed = any(r.confirmed for r in league.rounds)
     for row in standings(league):
         values = [round_display(rnd, row["id"], points) for rnd, points in zip(league.rounds, row["points"])]
-        rows.append([row["rank"] if confirmed else "—", row["name"], *values, row["total"]])
+        weights = weight_cells(row) if league.rules.weight.enabled else ()
+        rows.append([row["rank"] if confirmed else "—", row["name"], *values, *weights, row["total"]])
     rows.extend([[], ["순위별 배점"]])
     for start in (0, 8):
         rows.append([f"{i + 1}위" for i in range(start, start + 8)])
@@ -26,7 +27,10 @@ def visible_rows(league):
     rows.extend([[], ["보너스 규정"]])
     for name, rule in (("예선 폴", league.rules.pole), ("패스티스트랩", league.rules.fastest)):
         rows.append([name, f"+{rule.points}점" if rule.enabled else "미사용", bonus_description(rule)])
-    rows.extend([[stack_description(league.rules)], [], [footer_note(league)], ["GTLeaderboard"]])
+    rows.extend([[stack_description(league.rules)], []])
+    if league.rules.weight.enabled:
+        rows.extend([[weight_summary(league)], *[[line] for line in weight_rule_lines(league)], []])
+    rows.extend([[footer_note(league)], ["GTLeaderboard"]])
     return rows
 
 

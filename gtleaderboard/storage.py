@@ -6,9 +6,10 @@ from pathlib import Path
 from uuid import uuid4
 from dataclasses import asdict
 
-from .domain import Driver, League, Result, Revision, Round, ValidationError, rules_from_dict, validate_league, validate_rules
+from .domain import Driver, League, Revision, Round, ValidationError, result_from_dict, rules_from_dict, validate_league, validate_rules
 
 MAX_BYTES = 16 * 1024 * 1024
+LEAGUE_SCHEMA = 4
 
 
 def atomic_write(path, content):
@@ -29,7 +30,7 @@ def atomic_write(path, content):
 
 
 def encode(kind, data):
-    return json.dumps({"format": "GTLeaderboard", "schemaVersion": 3 if kind == "league" else 1, "kind": kind, "data": data}, ensure_ascii=False, indent=2).encode("utf-8")
+    return json.dumps({"format": "GTLeaderboard", "schemaVersion": LEAGUE_SCHEMA if kind == "league" else 2, "kind": kind, "data": data}, ensure_ascii=False, indent=2).encode("utf-8")
 
 
 def serialize_league(league):
@@ -54,7 +55,7 @@ def decode_document(raw, kind):
     if len(raw) > MAX_BYTES:
         raise ValidationError("16 MB를 초과하는 파일은 열 수 없습니다.")
     document = json.loads(raw.decode("utf-8-sig"))
-    supported = (1, 2, 3) if kind == "league" else (1,)
+    supported = (1, 2, 3, 4) if kind == "league" else (1, 2)
     if document["format"] != "GTLeaderboard" or type(document["schemaVersion"]) is not int or document["schemaVersion"] not in supported:
         raise ValidationError("지원하지 않는 파일 형식 또는 버전입니다. 원본 파일은 변경하지 않았습니다.")
     if document["kind"] != kind:
@@ -77,8 +78,8 @@ def deserialize_league(content):
         drivers = [Driver(**d) for d in data["drivers"]]
         rounds = []
         for rnd in data["rounds"]:
-            results = {key: Result(**value) for key, value in rnd["results"].items()}
-            history = [Revision(**{**rev, "results": {key: Result(**value) for key, value in rev["results"].items()}}) for rev in rnd["history"]]
+            results = {key: result_from_dict(value) for key, value in rnd["results"].items()}
+            history = [Revision(**{**rev, "results": {key: result_from_dict(value) for key, value in rev["results"].items()}}) for rev in rnd["history"]]
             rounds.append(Round(**{**rnd, "results": results, "history": history}))
         league = League(**{**data, "rules": rules, "drivers": drivers, "rounds": rounds})
         validate_league(league)

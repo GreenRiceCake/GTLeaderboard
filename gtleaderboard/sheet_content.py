@@ -35,3 +35,19 @@ def footer_note(league):
     if any(r.status == "POINTS" for rnd in league.rounds for r in rnd.results.values()):
         note += " · 이전 종합표에서 옮긴 점수 포함"
     return note
+
+
+def weight_cells(row):
+    weight = row['weight']
+    if weight is None:
+        return ('—', '—')
+    return (f'{weight.change:+d}' if weight.change else '0', str(weight.planned))
+
+
+def weight_summary(league):
+    return f'웨이트 · 최근 기록 기준 증감 / 다음 경기 예정 (kg) · 누적 상한 {league.rules.weight.max_total}kg'
+
+
+def weight_rule_lines(league):
+    values = league.rules.weight.position_changes
+    return [' · '.join(f'{i + 1}위 {values[i]:+d}' for i in range(start, start + 8)) for start in (0, 8)]

@@ -1,5 +1,6 @@
 """Session recovery, recent files and a guided first-season workflow."""
 from copy import deepcopy
+from dataclasses import asdict
 from datetime import datetime
 import json
 from pathlib import Path
@@ -8,7 +9,7 @@ from PySide6.QtCore import QSettings, QStandardPaths, QTimer, QUrl
 from PySide6.QtGui import QAction, QDesktopServices, QKeySequence
 from PySide6.QtWidgets import QDialog, QFormLayout, QInputDialog, QLabel, QLineEdit, QListWidget, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QWizard, QWizardPage
 
-from .domain import League, Round, ValidationError, add_drivers, apply_results, validate_league
+from .domain import League, Round, ValidationError, WeightRecord, add_drivers, apply_results, validate_league
 from .session import RecoveryStore, UndoHistory
 from .storage import serialize_league
 from .widgets import SearchableComboBox
@@ -195,8 +196,10 @@ class WorkflowMixin:
             if self.editor_dirty:
                 for key, (status, position, pole, fastest, penalty, note) in self.row_widgets.items():
                     draft[key] = [status.currentData(), position.value(), pole.isChecked(), fastest.isChecked(), penalty.value(), note.text()]
+                    if key in self.weight_widgets:
+                        draft[key].append(asdict(self.weight_widgets[key].value()))
             self.recovery.write({'league': json.loads(serialize_league(self.league)), 'round_id': self.current_round_id,
-                                 'draft': draft, 'reason': self.reason.text(), 'scale': self.png_scale,
+                                 'draft': draft, 'reason': '', 'scale': self.png_scale,
                                  'source': str(self.path or self.png_suggestion or '')})
             return True
         except (OSError, ValueError) as exc:
@@ -282,7 +285,10 @@ class WorkflowMixin:
             note.setText(values[5])
             for field in fields:
                 field.blockSignals(False)
-        self.reason.setText(data['reason'])
+            if key in self.weight_widgets:
+                self.weight_rank_changed(key)
+            if len(values) == 7 and key in self.weight_widgets:
+                self.weight_widgets[key].load(WeightRecord(**values[6]))
         self.editor_dirty = bool(data['draft'])
         if self.editor_dirty:
             self.tabs.setCurrentIndex(1)
@@ -370,15 +376,13 @@ class WorkflowMixin:
         self.tabs.setCurrentIndex(1)
         self.schedule_recovery()
 
-    def restore_revision(self, number, reason):
-        if not reason.strip() or len(reason) > 1900:
-            raise ValidationError('복원 사유를 1~1900자로 입력하세요.')
+    def restore_revision(self, number):
         if not self.resolve_editor():
             return False
         rnd = self.current_round()
         if rnd is None or not 1 <= number <= len(rnd.history):
             raise ValidationError('복원할 개정을 선택하세요.')
-        changed = apply_results(self.league, rnd.id, deepcopy(rnd.history[number - 1].results), f'개정 {number} 복원 · {reason.strip()}')
+        changed = apply_results(self.league, rnd.id, deepcopy(rnd.history[number - 1].results), f'개정 {number} 복원', recalculate_weights=False)
         if changed:
             self.mark_dirty()
             self.refresh()

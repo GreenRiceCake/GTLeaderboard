@@ -35,7 +35,7 @@ class ReleaseTests(unittest.TestCase):
         if kind == "full":
             files["models/test.onnx"] = b"model"
         files.update(extra or {})
-        manifest = {"format": "GTLeaderboardRelease", "schemaVersion": 1, "version": "0.7.0", "platform": "windows-x64", "kind": kind, "leagueSchema": {"min": 1, "max": 3}, "model": {"file": "models/test.onnx", "sha256": sha256(b"model").hexdigest()}, "files": {name: {"size": len(data), "sha256": sha256(data).hexdigest()} for name, data in files.items()}}
+        manifest = {"format": "GTLeaderboardRelease", "schemaVersion": 1, "version": "0.7.0", "platform": "windows-x64", "kind": kind, "leagueSchema": {"min": 1, "max": 4}, "model": {"file": "models/test.onnx", "sha256": sha256(b"model").hexdigest()}, "files": {name: {"size": len(data), "sha256": sha256(data).hexdigest()} for name, data in files.items()}}
         if mutate:
             mutate(manifest)
         with ZipFile(self.zip, "w") as archive:
@@ -105,7 +105,7 @@ class ReleaseTests(unittest.TestCase):
             inspect_package(self.zip)
 
     def test_platform_schema_and_missing_full_model_rejected(self):
-        for mutation in (lambda m: m.update(platform="linux"), lambda m: m.update(kind="full"), lambda m: m.update(leagueSchema={"min": 4, "max": 5})):
+        for mutation in (lambda m: m.update(platform="linux"), lambda m: m.update(kind="full"), lambda m: m.update(leagueSchema={"min": 5, "max": 6})):
             self.write_package(mutate=mutation)
             with self.assertRaises(ValidationError):
                 inspect_package(self.zip)

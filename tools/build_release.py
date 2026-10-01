@@ -55,7 +55,7 @@ def package_release(folder):
         payload = files + ([folder / "models" / MODEL_NAME] if kind == "full" else [])
         manifest = {
             "format": "GTLeaderboardRelease", "schemaVersion": 1, "version": __version__,
-            "platform": "windows-x64", "kind": kind, "leagueSchema": {"min": 1, "max": 3},
+            "platform": "windows-x64", "kind": kind, "leagueSchema": {"min": 1, "max": 4},
             "model": {"file": f"models/{MODEL_NAME}", "sha256": MODEL_SHA256},
             "files": {p.relative_to(folder).as_posix(): {"size": p.stat().st_size, "sha256": digest_file(p)} for p in payload},
         }

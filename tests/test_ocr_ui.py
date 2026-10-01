@@ -41,6 +41,19 @@ class OcrReviewUiTests(unittest.TestCase):
         self.assertEqual(self.dialog.updated_league.drivers[0].name, "수정한 이름")
         self.assertTrue(self.dialog.updated_league.rounds[0].results[self.dialog.updated_league.drivers[0].id].fastest)
         self.assertEqual(len(self.league.drivers), 0)
+        self.assertFalse(hasattr(self.dialog, 'reason'))
+        imported = self.dialog.updated_league
+        review = OcrDialog(imported, imported.rounds[0].id)
+        try:
+            review.receive_rows([row(2, '수정한 이름')])
+            review.fields[0][6].setChecked(True)
+            review.reviewed.setChecked(True)
+            review.commit()
+            self.assertEqual(review.result(), QDialog.DialogCode.Accepted)
+            self.assertEqual(review.updated_league.rounds[0].history[-1].reason, '스크린샷 결과 수정')
+            self.assertEqual(len(review.updated_league.rounds[0].history), 2)
+        finally:
+            review.reject()
 
     def test_adding_pages_preserves_user_edits_and_cancel_does_not_apply(self):
         self.dialog.receive_rows([row()])
@@ -59,7 +72,6 @@ class OcrReviewUiTests(unittest.TestCase):
         apply_results(self.league, self.league.rounds[0].id, {driver_id: result}, "OCR")
         window = MainWindow(self.league)
         window.row_widgets[driver_id][1].setValue(2)
-        window.reason.setText("심사")
         self.assertTrue(window.apply_editor())
         changed = window.league.rounds[0].results[driver_id]
         self.assertEqual((changed.position, changed.screen_position, changed.best_lap_ms), (2, 1, 135371))

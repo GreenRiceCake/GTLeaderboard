@@ -14,18 +14,18 @@ https://raw.githubusercontent.com/GreenRiceCake/GTLeaderboard/main/update_manife
 2. [BUILDING.md](BUILDING.md)에 따라 테스트, 빌드 및 EXE 자체 검사를 실행합니다.
 3. `dist`에 생성된 ZIP·매니페스트·체크섬을 한 묶음으로 사용합니다.
 
-아래는 `1.0.0`의 예시입니다. 다음 배포에서는 버전과 태그를 함께 바꿉니다.
+아래는 `1.1.0`의 예시입니다. 다음 배포에서는 버전과 태그를 함께 바꿉니다.
 
 | 파일 | 게시 위치 | 용도 |
 | --- | --- | --- |
-| `dist/GTLeaderboard-1.0.0-windows-x64-full.zip` | `v1.0.0` Release 첨부 | 필수. 사용자 다운로드와 온라인 업데이트 |
-| `dist/GTLeaderboard-1.0.0-windows-x64-update.zip` | 같은 Release 첨부 | 선택. 기존 모델을 재사용하는 수동 업데이트 |
+| `dist/GTLeaderboard-1.1.0-windows-x64-full.zip` | `v1.1.0` Release 첨부 | 필수. 사용자 다운로드와 온라인 업데이트 |
+| `dist/GTLeaderboard-1.1.0-windows-x64-update.zip` | 같은 Release 첨부 | 선택. 기존 모델을 재사용하는 수동 업데이트 |
 | `dist/SHA256SUMS.txt` | 같은 Release 첨부 | 권장. 파일 체크섬 |
 | `dist/update_manifest.json` | main 루트의 `update_manifest.json` | 필수. 최신 버전 안내와 ZIP 검증 정보 |
 
 ## 게시 순서
 
-1. 배포할 소스 커밋에 `v1.0.0` 형식의 태그를 지정합니다. 태그 버전과 앱 버전이 같아야 합니다.
+1. 배포할 소스 커밋에 `v1.1.0` 형식의 태그를 지정합니다. 태그 버전과 앱 버전이 같아야 합니다.
 2. 해당 태그의 Release에 full ZIP과 필요한 첨부 파일을 올립니다. ZIP 이름과 내용은 그대로 유지합니다.
 3. Release를 공개하고 매니페스트의 다운로드 주소로 로그인 없이 ZIP을 받을 수 있는지 확인합니다.
 4. **같은 빌드의** `dist/update_manifest.json`을 main 루트에 복사해 커밋하고 푸시합니다.
@@ -49,7 +49,7 @@ main의 매니페스트는 자동으로 갱신하지 않으므로 게시 순서�
 
 - `app`: `GTLeaderboard`
 - `schema_version`: `1`
-- `version`: 앱과 ZIP 내부의 버전. 예: `1.0.0`
+- `version`: 앱과 ZIP 내부의 버전. 예: `1.1.0`
 - `title`, `changelog`: 업데이트 제목과 설명. 일반 텍스트로 표시합니다.
 - `update_type`: `zip`
 - `download_url`: 해당 버전 Release의 full ZIP HTTPS 주소

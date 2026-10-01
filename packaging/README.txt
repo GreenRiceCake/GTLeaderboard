@@ -1,4 +1,4 @@
-GTLeaderboard 1.0.0 · Windows x64
+GTLeaderboard 1.1.0 · Windows x64
 
 처음 사용
 1. full.zip을 새 폴더에 모두 압축 해제합니다.

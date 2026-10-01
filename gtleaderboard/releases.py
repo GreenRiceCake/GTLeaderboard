@@ -74,7 +74,7 @@ def inspect_package(path):
             if manifest["platform"] != "windows-x64" or manifest["kind"] not in ("full", "update"):
                 raise ValidationError("Windows x64용 배포 패키지가 아닙니다.")
             compatibility = manifest["leagueSchema"]
-            if not all(type(compatibility[k]) is int for k in ("min", "max")) or not compatibility["min"] <= 3 <= compatibility["max"]:
+            if not all(type(compatibility[k]) is int for k in ("min", "max")) or not compatibility["min"] <= 4 <= compatibility["max"]:
                 raise ValidationError("현재 리그 저장 형식을 지원하지 않는 업데이트입니다.")
             model = manifest["model"]
             safe_payload_name(model["file"])

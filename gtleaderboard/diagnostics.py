@@ -9,7 +9,7 @@ from uuid import uuid4
 def self_test(app, report_path, screenshots=()):
     from . import __version__
     from .catalog import load_catalog, model_directory
-    from .domain import League, Round, Result, add_drivers, apply_results, standings
+    from .domain import League, Round, Result, WeightRules, WeightRecord, add_drivers, apply_results, standings
     from .export_png import render_sheet, save_png
     from .storage import save_league, load_league, serialize_league
     from .ocr import TextRecognizer, recognize_screenshot
@@ -29,7 +29,10 @@ def self_test(app, report_path, screenshots=()):
         league = League("배포본 자체 검사")
         add_drivers(league, ["한글 드라이버", "Example Driver"])
         league.rounds = [Round("R01", tracks[0]["id"], tracks[0]["name"])]
-        apply_results(league, league.rounds[0].id, {league.drivers[0].id: Result("FINISHED", 1, pole=True, fastest=True)}, "자체 검사")
+        league.rules.weight = WeightRules(True, [30] + [0] * 15, 100)
+        apply_results(league, league.rounds[0].id, {league.drivers[0].id: Result("FINISHED", 1, pole=True, fastest=True, weight=WeightRecord(actual=90))}, "자체 검사")
+        assert league.rounds[0].results[league.drivers[0].id].weight == WeightRecord(90, 30, 100)
+        report['checks']['weight_cap_and_calculation'] = True
         save_league(output / "league.gtlb", league)
         assert load_league(output / "league.gtlb") == league
         image = render_sheet(league, 1)

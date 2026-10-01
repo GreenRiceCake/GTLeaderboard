@@ -114,7 +114,7 @@ class ImportTests(unittest.TestCase):
         with WorkspaceDirectory() as folder:
             path = Path(folder) / "ocr.gtlb"
             save_league(path, imported)
-            self.assertEqual(json.loads(path.read_text(encoding="utf-8"))["schemaVersion"], 3)
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8"))["schemaVersion"], 4)
             self.assertEqual(load_league(path), imported)
 
     def test_legacy_v1_document_still_loads(self):

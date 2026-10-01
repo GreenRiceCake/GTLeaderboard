@@ -11,7 +11,7 @@
 ## 다운로드와 실행
 
 [GitHub Releases](https://github.com/GreenRiceCake/GTLeaderboard/releases)에서
-`GTLeaderboard-1.0.0-windows-x64-full.zip`을 받아 압축을 풀고 `GTLeaderboard.exe`를 실행합니다.
+`GTLeaderboard-1.1.0-windows-x64-full.zip`을 받아 압축을 풀고 `GTLeaderboard.exe`를 실행합니다.
 Python을 따로 설치할 필요가 없습니다. OCR 모델은 함께 제공되는 `models` 폴더에 있습니다.
 EXE와 models 폴더를 함께 보관하세요.
 
@@ -42,3 +42,13 @@ python -m unittest discover -s tests
 
 재빌드는 [BUILDING.md](BUILDING.md), 포함 라이브러리의 라이선스는
 [packaging/licenses/THIRD_PARTY.md](packaging/licenses/THIRD_PARTY.md)를 참고하세요.
+
+## 웨이트 페널티
+
+리그 설정 → 웨이트에서 순위별 증량·유지·감량과 누적 상한(최대 200kg)을 지정합니다.
+OCR 결과를 반영하면 자동 계산하며, 라운드 결과에서 실제 중량과 증감값을 나중에 수정할 수 있으며, 예정 중량은 자동 계산됩니다.
+직접 지정한 증감값은 유지되며, 예정 중량은 실제 중량과 증감값으로 계산됩니다. 행을 선택하고 ‘선택 선수 웨이트 규칙 재계산’을 누르면 자동값으로 복원합니다.
+종합 순위와 PNG·CSV에는 최근 기록의 증감량과 예정 중량만 표시합니다.
+기존 파일은 열 수 있으며, 이 버전에서 새로 저장한 파일은 1.1.0 이상에서 열어 주세요.
+
+라운드 수정·OCR 재반영·이전 결과 복원은 변경 사유 입력 없이 진행하며, 수정 시각과 결과 이력은 자동으로 보관합니다.

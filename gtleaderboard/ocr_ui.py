@@ -67,6 +67,8 @@ class OcrDialog(QDialog):
         layout.addLayout(top)
         notice = QLabel("잘리지 않은 16:9 로비 결과 화면용입니다. 1~8위와 9위 이후 화면을 함께 추가하세요.\n이름이 일치하는 등록자는 연결하고, 불확실한 이름은 직접 선택합니다. 결과에 없는 등록자는 DNS로 채웁니다. 예선 폴·포인트 벌점은 사진에서 추측하지 않습니다.")
         notice.setWordWrap(True)
+        if league.rules.weight.enabled:
+            notice.setText(notice.text() + "\n웨이트는 반영 시 순위 규칙으로 계산합니다. 신규 선수 실제 중량은 0kg이며, 기존 선수는 이전 예정 중량이 기본값입니다. 반영 후 실제 중량·증감값을 수정하면 예정 중량은 자동 계산됩니다.")
         layout.addWidget(notice)
         self.progress = QLabel("스크린샷을 선택하면 이 PC에서 인식합니다. 외부로 사진을 전송하지 않습니다.")
         self.progress.setTextFormat(Qt.TextFormat.PlainText)
@@ -94,10 +96,6 @@ class OcrDialog(QDialog):
         layout.addWidget(self.aliases)
         self.recalculate.toggled.connect(self.edited)
         self.aliases.toggled.connect(self.edited)
-        self.reason = QLineEdit("스크린샷 최초 결과 입력" if not self.rnd.confirmed else "")
-        self.reason.setMaxLength(2000)
-        self.reason.setPlaceholderText("변경 사유 · 기존 기록을 바꾸는 경우 사유를 입력하세요")
-        layout.addWidget(self.reason)
         panel = QFrame()
         panel.setObjectName("ocrCommitPanel")
         bottom = QHBoxLayout(panel)
@@ -319,7 +317,8 @@ class OcrDialog(QDialog):
         if not self.reviewed.isChecked() or (self.worker is not None and self.worker.isRunning()):
             return
         try:
-            self.updated_league = merge_review(self.league, self.round_id, self.choices(), self.reason.text().strip(), self.recalculate.isChecked(), self.aliases.isChecked())
+            record = "스크린샷 결과 수정" if self.rnd.confirmed else "스크린샷 최초 결과 입력"
+            self.updated_league = merge_review(self.league, self.round_id, self.choices(), record, self.recalculate.isChecked(), self.aliases.isChecked())
         except (ValidationError, ValueError) as exc:
             QMessageBox.warning(self, "결과 확인", str(exc))
             return
